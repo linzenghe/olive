@@ -2,6 +2,7 @@
   <div class="carousel-wrap" id="carousel">
     <transition-group tag="ul" class='slide-ul' name="list">
       <li v-for="(list,index) in slideList" :key="index" v-show="index===currentIndex" @mouseenter="stop" @mouseleave="go">
+        <button @click="myajax">获取首页信息</button>
         <a :href="list.clickUrl" >
           <img :src="list.image" :alt="list.desc">
         </a>
@@ -10,6 +11,7 @@
     <div class="carousel-items">
       <span v-for="(item,index) in slideList.length" :class="{'active':index===currentIndex}" @mouseover="change(index)"></span>
     </div>
+
   </div>
 </template>
 
@@ -39,6 +41,16 @@
       }
     },
     methods:{
+      /*获取首页数据*/
+      myajax(){
+        this.axios.get("/api/homePage").then(response => {
+          console.log("获取信息成功")
+          console.log(response);
+        }, response => {
+          console.log("获取信息失败")
+          console.log(response);
+        })
+      },
       // 开始
       go() {
         this.timer = setInterval(() => {

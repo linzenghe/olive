@@ -11,14 +11,14 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      /*'/api': {
+      '/api': {
         target: 'http://192.168.0.102:8081/api',  //本地主机
         // target: 'http://192.168.0.102:8081/api',  //线上主机
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
         }
-      }*/
+      }
     },
 
     // Various Dev Server settings
