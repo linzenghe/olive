@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import goodsData from '../lib/newGoodsData'
-import shopItem from '../components/shop-item'
-import prompt from '../components/prompt'
-import slide from '../components/slide'
+import goodsData from '@/lib/newGoodsData'
+import shopItem from '@/components/shop-item'
+import prompt from '@/components/prompt'
+import slide from '@/components/slide'
 export default {
   data(){
     return {

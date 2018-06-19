@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import itemsData from '../lib/newItemsData'
-import prompt from '../components/prompt'
+import itemsData from '@/lib/newItemsData'
+import prompt from '@/components/prompt'
 export default {
   data(){
     return{

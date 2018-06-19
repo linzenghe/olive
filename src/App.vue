@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import headerNav from './components/header-nav.vue'
-import footerNav from './components/footer-nav.vue'
+import headerNav from '@/components/header-nav.vue'
+import footerNav from '@/components/footer-nav.vue'
 export default {
   name: 'app',
   components: {

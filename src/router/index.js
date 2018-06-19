@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import '../assets/css/header.css'
 import '../assets/css/reset.css'
 import '../assets/css/footer.css'
+import '../assets/fonts/iconfont.css'
 Vue.use(Router)
 
 import Shop from '../views/shop'
@@ -20,7 +21,7 @@ import Cart from '../views/cart'
 export default new Router({
   mode:'history',
   routes: [
-    {path:'/',component:Shop},
+    {path:'/',component:Home},
     {path:'/home',component:Home},
     {path:'/Mphone',component:Mphone},
     {path:'/PageOne',component:PageOne},

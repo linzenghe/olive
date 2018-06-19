@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import service from '../components/service'
+import service from '@/components/service'
 export default {
   components : {
     service

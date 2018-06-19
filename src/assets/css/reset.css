@@ -27,7 +27,7 @@ h4,
 h5,
 h6 {
 	font-size: 100%;
-    font-weight: 400;
+  font-weight: 400;
 }
 html {
   height: 100%;
@@ -103,22 +103,11 @@ pre {
 .clear {
   *zoom: 1;
 }
-.store-content{
-	width: 1220px;
-
-	padding: 0 0 25px;
+.container{
+	width: 1200px;
 	margin: 0 auto;
 	position: relative;
 }
 .hide{
 	display: none!important;
-}
-.fn-left, .fn-right{
-	display: inline;
-}
-.fn-left{
-	float: left;
-}
-.fn-right{
-	float: right;
 }
