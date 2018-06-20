@@ -1,17 +1,21 @@
 <template>
   <div class="carousel-wrap" id="carousel">
-    <transition-group tag="ul" class='slide-ul' name="list">
-      <li v-for="(list,index) in slideList" :key="index" v-show="index===currentIndex" @mouseenter="stop" @mouseleave="go">
-        <button @click="myajax">获取首页信息</button>
-        <a :href="list.clickUrl" >
-          <img :src="list.image" :alt="list.desc">
-        </a>
-      </li>
-    </transition-group>
-    <div class="carousel-items">
-      <span v-for="(item,index) in slideList.length" :class="{'active':index===currentIndex}" @mouseover="change(index)"></span>
+    <div class="carousel-slider" @mouseenter="stop" @mouseleave="go">
+      <button type="button" class="slick-arrow slick-prev" @click="prev"><i class="icon icon-zuo"></i></button>
+      <transition-group tag="ul" class="slick-list" name="list" >
+        <li v-for="(list,index) in slideList" :key="index" :class="{'slick-active':index===currentIndex}" v-show="index===currentIndex" >
+          <a :href="list.clickUrl" >
+            <img :src="list.imageUrl" :alt="list.desc">
+          </a>
+        </li>
+      </transition-group>
+      <button type="button" class="slick-arrow slick-next" @click="next"><i class="icon icon-you"></i></button>
+      <ul class="slick-dots">
+        <li v-for="(list,index) in slideList.length" :class="{'slick-active':index===currentIndex}" @mouseover="change(index)">
+          <button></button>
+        </li>
+      </ul>
     </div>
-
   </div>
 </template>
 
@@ -19,39 +23,12 @@
   export default{
     data(){
       return{
-        slideList:[
-          {
-            'clickUrl' : '#',
-            'desc' : '第一张图',
-            'image' : 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515768809049&di=db3755b56d5fc55ecffe158413ad067c&imgtype=0&src=http%3A%2F%2Fdigital.zol.com.cn%2F275_module_images%2F17%2F537dbbf398e85.jpg'
-          },
-          {
-            'clickUrl' : '#',
-            'desc' : '第二张图',
-            'image' : 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515768954029&di=bcfe0420283f1b6246098d145c45aa36&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D152895368%2C1538594464%26fm%3D214%26gp%3D0.jpg'
-          },
-          {
-            'clickUrl' : '#',
-            'desc' : '第三张图',
-            'image' : 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515768831649&di=dd845cba7b09274f11ad11be9f597596&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D4000770372%2C1569155497%26fm%3D214%26gp%3D0.jpg'
-          }
-        ],
+        slideList:[],
         currentIndex:0,
         timer: ''
       }
     },
     methods:{
-      /*获取首页数据*/
-      myajax(){
-        this.axios.get("/api/homePage").then(response => {
-          console.log("获取信息成功")
-          console.log(response);
-        }, response => {
-          console.log("获取信息失败")
-          console.log(response);
-        })
-      },
-      // 开始
       go() {
         this.timer = setInterval(() => {
           this.autoPlay()
@@ -72,82 +49,138 @@
         if (this.currentIndex > this.slideList.length - 1) {
           this.currentIndex = 0
         }
+      },
+      //上一页
+      prev(){
+        this.currentIndex--;
+        if(this.currentIndex <0){
+          this.currentIndex = this.slideList.length-1
+        }
+      },
+      next(){
+        this.currentIndex++
+        if (this.currentIndex > this.slideList.length - 1) {
+          this.currentIndex = 0
+        }
       }
     },
     created() {
-      //异步处理
       this.$nextTick(() => {
         this.timer = setInterval(() => {
           this.autoPlay()
         }, 4000)
       })
+    },
+    mounted(){
+      this.axios.get("/api/homePage").then(response => {
+        this.slideList= response.data.bannerList;
+      }, response => {
+        return false;
+      });
     }
+
   }
 </script>
 <style>
-  .carousel-wrap {
-    height: 453px;
-    width: 100%;
+  .carousel-wrap{
+    height: 420px;
     overflow: hidden;
-    background-color: #fff;
-    border-radius: 10px;
-    margin-bottom: 20px;
-  }
-
-  .slide-ul {
     position: relative;
-    width: 100%;
-    height: 100%;
   }
-
-  .slide-ul li {
+  .carousel-wrap .carousel-slider{
+    position: static;
+  }
+  .carousel-wrap .carousel-slider .slick-arrow{
     position: absolute;
-    width: 100%;
-    height: 100%;
+    z-index: 9;
+    top: 200px!important;
+    width: 50px;
+    height: 50px;
+    opacity: 80;
+    background-color: #D0C4AF;
+    border-radius: 500px;
+    cursor: pointer;
+    color: #fff;
   }
-
-  img {
-    width: 100%;
-    height: 100%;
+  .carousel-wrap .carousel-slider .slick-arrow .icon{
+    font-size: 22px;
   }
-
-  .carousel-items {
+  .carousel-wrap .carousel-slider .slick-arrow.slick-prev{
+    display: block;
+    left: 100px;
+  }
+  .carousel-wrap .carousel-slider .slick-arrow.slick-next{
+    display: block;
+    right: 100px;
+  }
+  .carousel-wrap .carousel-slider .slick-list{
+    position: relative;
+    height: 420px;
+  }
+  .carousel-wrap .carousel-slider .slick-list li{
     position: absolute;
-    z-index: 10;
-    top: 480px;
+    left:0;
+    top: 0;
     width: 100%;
-    margin: 0 auto;
+    height: 100%;
+    opacity: 0;
+    transition:opacity 500ms ease;
+    -moz-transition:opacity 500ms ease; /* Firefox 4 */
+    -webkit-transition:opacity 500ms ease; /* Safari and Chrome */
+    -o-transition:opacity 500ms ease; /* Opera */
+  }
+  .carousel-wrap .carousel-slider .slick-list li.slick-active{
+    opacity: 1;
+  }
+  .carousel-wrap .carousel-slider .slick-list li img{
+    width: 100%;
+    min-height: 420px;
+  }
+  .carousel-wrap .carousel-slider .slick-dots{
+    position: absolute;
+    bottom: 4px;
+    display: block;
+    width: 100%;
+    padding: 0;
+    list-style: none;
     text-align: center;
-    font-size: 0;
   }
-
-  .carousel-items span {
+  .carousel-wrap .carousel-slider .slick-dots li{
+    position: relative;
     display: inline-block;
-    height: 6px;
-    width: 30px;
-    margin: 0 3px;
-    background-color: #b2b2b2;
+    width: 8px;
+    height: 8px;
+    margin: 0 8px 10px;
+    padding: 0;
     cursor: pointer;
   }
-  .carousel-items .active {
-    background-color: orange;
+  .carousel-wrap .carousel-slider .slick-dots li button{
+    font-size: 0;
+    line-height: 0;
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 500px;
+    color: transparent;
+    border: 1px solid #cecece;
+    background: #fff;
+    padding: 0;
+  }
+  .carousel-wrap .carousel-slider .slick-dots li.slick-active button{
+    -webkit-box-shadow: 0 0 0 4px #dfcead;
+    -moz-box-shadow: 0 0 0 4px #dfcead;
+    box-shadow: 0 0 0 4px #dfcead;
+    background: #a7936e;
+    -webkit-border-radius: 500px;
+    -moz-border-radius: 500px;
+    -ms-border-radius: 500px;
+    -o-border-radius: 500px;
+    border-radius: 500px;
+    border: none;
   }
 
-  .list-enter-to {
-    transition: all 1s ease;
-    transform: translateX(0);
-  }
-
-  .list-leave-active {
-    transition: all 1s ease;
-    transform: translateX(-100%)
-  }
-
-  .list-enter {
-    transform: translateX(100%)
-  }
-
-  .list-leave {
-    transform: translateX(0)
-  }
 </style>
+
+
+
+

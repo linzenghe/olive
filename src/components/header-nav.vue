@@ -21,11 +21,15 @@
         </ul>
       </div>
     </div>
+    <loginPop></loginPop>
   </div>
 </template>
 
 <script>
+import loginPop from './login'
 export default {
-
+  components:{
+    loginPop,
+  }
 }
 </script>

@@ -1,7 +1,8 @@
 <template>
   <div id="home">
+    <slide></slide>
     <div class="container">
-      <slide></slide>
+
     </div>
   </div>
 </template>
