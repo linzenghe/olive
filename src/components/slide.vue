@@ -2,7 +2,7 @@
   <div class="carousel-wrap" id="carousel">
     <div class="carousel-slider" @mouseenter="stop" @mouseleave="go">
       <button type="button" class="slick-arrow slick-prev" @click="prev"><i class="icon icon-zuo"></i></button>
-      <transition-group tag="ul" class="slick-list" name="list" >
+      <transition-group tag="ul" class="slick-list" name="list">
         <li v-for="(list,index) in slideList" :key="index" :class="{'slick-active':index===currentIndex}" v-show="index===currentIndex" >
           <a :href="list.clickUrl" >
             <img :src="list.imageUrl" :alt="list.desc">

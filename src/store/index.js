@@ -6,39 +6,61 @@ Vue.use(Vuex)
 let store = new Vuex.Store({
   state:{
     /*存放数据*/
-    carPanelData : [],
-    /*是否为最大值*/
+    /*carPanelData : [],
+    /!*是否为最大值*!/
     maxOff : false,
-    /*控制隐藏显示*/
+    /!*控制隐藏显示*!/
     carShow : false,
     ball:{
       show : false,   //显示
       el : null,     //点击哪一个
       img : ''
-    }
+    }*/
+    resLogShow:false,
+    logShow:false,
+    regShow:false
   },
   /*计算*/
   getters:{
-    totalCount(state){
+    /*totalCount(state){
       let count=0
       state.carPanelData.forEach(goods=>{
         count+=goods.count
       })
       return count
     },
-    /*价格*/
+    /!*价格*!/
     totalPrice(state){
       let price=0
       state.carPanelData.forEach(goods=>{
         price+=goods.count*goods.info.price
       })
       return price
-    }
+    }*/
   },
   mutations: {
-    addCarpanelData(state,data){
+    showLog(state){
+      state.resLogShow=true
+      state.logShow=true
+    },
+    showReg(state){
+      state.resLogShow=true
+      state.regShow=true
+    },
+    hideResLog(state){
+      state.resLogShow=false
+      state.logShow=false
+      state.regShow=false
+    },
+    gotoLog(state){
+      state.logShow=true
+    },
+    gotoReg(state){
+      state.regShow=true
+    }
+    /*addCarpanelData(state,data){
       state.carShow=true
-      /*bOff是否添加过*/
+      /!*bOff是否添加过*!/
       let bOff=true
       state.carPanelData.forEach((goods)=>{
         if(goods.info.sku_id === data.info.sku_id){
@@ -50,7 +72,7 @@ let store = new Vuex.Store({
             return
           }
           bOff=false
-          /*更改小球状态*/
+          /!*更改小球状态*!/
           state.ball.show = true
           state.ball.img = data.info.ali_image
           state.ball.el = event.path[0]
@@ -60,7 +82,7 @@ let store = new Vuex.Store({
         let goodsData=data
         Vue.set(goodsData,'count',data.count)
         state.carPanelData.push(goodsData)
-        /*更改小球状态*/
+        /!*更改小球状态*!/
         state.ball.show = true
         state.ball.img = data.info.ali_image
         state.ball.el = event.path[0]
@@ -74,11 +96,11 @@ let store = new Vuex.Store({
         }
       })
     },
-    /*关闭提示*/
+    /!*关闭提示*!/
     closePrompt(state){
       state.maxOff=false
     },
-    /*显示购物车*/
+    /!*显示购物车*!/
     showCar(state){
       state.carShow=true
     },
@@ -86,7 +108,7 @@ let store = new Vuex.Store({
       state.carShow=false
     },
 
-    /*增加*/
+    /!*增加*!/
     plusCartPanelData(state,id){
       state.carPanelData.forEach((goods,index)=>{
         if(goods.sku_id===id){
@@ -96,7 +118,7 @@ let store = new Vuex.Store({
         }
       })
     },
-    /*减少*/
+    /!*减少*!/
     subCartPanelData(state,id){
       state.carPanelData.forEach((goods,index)=>{
         if(goods.sku_id===id){
@@ -105,7 +127,7 @@ let store = new Vuex.Store({
           return
         }
       })
-    }
+    }*/
   }
 })
 

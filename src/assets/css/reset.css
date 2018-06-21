@@ -111,3 +111,27 @@ pre {
 .hide{
 	display: none!important;
 }
+
+/*表单*/
+.form .item{
+  margin-top: 16px;
+}
+.form .item .item-input{
+  border: 1px solid rgba(0,0,0,0.50);
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #222;
+}
+.form .submit-item{
+  margin-top: 16px;
+}
+.form .item .item-button,.form .submit-item .item-button{
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 0;
+}

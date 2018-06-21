@@ -40,6 +40,17 @@
   font-weight: bold;
   cursor: pointer;
 }
+.navbar .navbar-right li.nav-item .icon{
+  font-size: 20px;
+  color: #666;
+  font-weight: normal;
+}
+.navbar .navbar-right li.cart-item{
+  position: relative;
+}
+.navbar .navbar-right li.cart-item .sum{
+
+}
 .navbar .navbar-right li.registerBtn{
   background: #000;
   color: #fff;
