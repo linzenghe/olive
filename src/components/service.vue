@@ -1,22 +1,34 @@
 <template>
-  <ul class="shopping-info gray-box">
-    <li class="online-services" >
-      <span class="online"><img src="../assets/img/icon01.png"/></span>
-      <h5>在线客服</h5>
-      <h6>周一至周日 9:00-18:00</h6></li>
-    <li class="online-services" >
-      <span class="online"><img src="../assets/img/icon02.png"/></span>
-      <h5>7 天无理由退货</h5>
-      <h6>7 天无理由退货 请放心购买</h6></li>
-    <li class="online-services" >
-      <span class="online"><img src="../assets/img/icon03.png"/></span>
-      <h5>15 天免费换货</h5>
-      <h6>15 天内如遇质量问题 免费换货</h6></li>
-    <li class="online-services" >
-      <span class="online"><img src="../assets/img/icon04.png"/></span>
-      <h5 class="ng-binding">满 150 元免运费</h5>
-      <h6>全场使用顺丰快递</h6></li>
-  </ul>
+  <section class="service-section">
+    <div class="container">
+      <ul class="shopping-info gray-box">
+        <li class="online-services" >
+          <span class="online"><img src="../assets/img/icon01.png"/></span>
+          <h5>全球直邮</h5>
+        </li>
+        <li class="online-services" >
+          <span class="online"><img src="../assets/img/icon02.png"/></span>
+          <h5>直邮清关补贴</h5>
+        </li>
+        <li class="online-services" >
+          <span class="online"><img src="../assets/img/icon03.png"/></span>
+          <h5>国内现货闪发</h5>
+        </li>
+        <li class="online-services" >
+          <span class="online"><img src="../assets/img/icon04.png"/></span>
+          <h5>欧盟认证标准</h5>
+        </li>
+        <li class="online-services" >
+          <span class="online"><img src="../assets/img/icon04.png"/></span>
+          <h5>原产地直供</h5>
+        </li>
+        <li class="online-services" >
+          <span class="online"><img src="../assets/img/icon04.png"/></span>
+          <h5>欧盟认证</h5>
+        </li>
+      </ul>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -24,31 +36,29 @@
 </script>
 
 <style>
-  .shopping-info {
-    margin: 10px 0 0 0;
-    overflow: hidden;
-    background: #fff;
-    text-align: center;
+  .service-section{
+    background: #F5f5f5;
+    padding: 100px 0;
   }
-  .shopping-info li .online-services {
-    cursor: pointer;
+  .service-section .shopping-info{
+    overflow: hidden;
+    text-align: center;
   }
   .shopping-info li {
     float: left;
-    width: 304px;
-    height: 153px;
+    width: 16.6666%;
   }
-
   .shopping-info li span {
-    margin: 33px auto 5px;
+    margin: 0px auto 5px;
     display: block;
     width: 32px;
     height: 36px;
   }
   .shopping-info li h5 {
     color: #000;
-    font-size: 15px;
+    font-size: 12px;
     line-height: 25px;
+    font-weight: bold;
   }
   .shopping-info li h6 {
     color: #A8A8A8;

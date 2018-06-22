@@ -16,9 +16,10 @@ let store = new Vuex.Store({
       el : null,     //点击哪一个
       img : ''
     }*/
-    resLogShow:false,
-    logShow:false,
-    regShow:false
+    resLogShow:false,   //登陆注册框
+    logShow:false,      //登陆面板
+    regShow:false,      //注册面板
+    carShow:false       //显示购物车
   },
   /*计算*/
   getters:{
@@ -57,7 +58,13 @@ let store = new Vuex.Store({
     },
     gotoReg(state){
       state.regShow=true
-    }
+    },
+    showCar(state){
+      state.carShow=true
+    },
+    hideCar(state){
+      state.carShow=false
+    },
     /*addCarpanelData(state,data){
       state.carShow=true
       /!*bOff是否添加过*!/
@@ -101,12 +108,7 @@ let store = new Vuex.Store({
       state.maxOff=false
     },
     /!*显示购物车*!/
-    showCar(state){
-      state.carShow=true
-    },
-    hideCar(state){
-      state.carShow=false
-    },
+
 
     /!*增加*!/
     plusCartPanelData(state,id){

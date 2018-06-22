@@ -49,7 +49,18 @@
   position: relative;
 }
 .navbar .navbar-right li.cart-item .sum{
-
+  position: absolute;
+  width:  20px;
+  height: 20px;
+  top: 8px;
+  right: -10px;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  z-index: 1;
+  background: #d4282d;
+  border-radius: 50%;
 }
 .navbar .navbar-right li.registerBtn{
   background: #000;
@@ -58,4 +69,164 @@
   line-height: 46px;
   margin:7px 0 7px 15px;
 }
-
+/*购物车*/
+.nav-cart-wrapper{
+  position: absolute;
+  left: 50%;
+  top: 50px;
+  height: 338px;
+  width: 330px;
+  margin-left: -165px;
+  z-index: 1;
+  overflow: visible;
+  background: #fff;
+  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, .06), 0 20px 40px rgba(0, 0, 0, .15);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .06), 0 20px 40px rgba(0, 0, 0, .15);
+  /*display: none;*/
+}
+.nav-cart-wrapper .nav-cart-list{
+  position: relative;
+  height: 100%;
+}
+.nav-cart-wrapper .nav-cart-list:before{
+  content: '';
+  position: absolute;
+  left: 50%;
+  margin-left: -6px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  top: -8px;
+  border-bottom: 8px solid rgba(0, 0, 0, .06);
+}
+.nav-cart-wrapper .nav-cart-list:after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  margin-left: -6px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  top: -6px;
+  border-bottom: 8px solid #fff;
+}
+.nav-cart-wrapper .empty{
+  overflow: hidden;
+  text-align: center;
+}
+.nav-cart-wrapper .empty .icon{
+  font-size: 60px;
+  color: #999;
+  line-height: normal;
+  margin: 40px 0 20px;
+  display: inline-block;
+}
+.nav-cart-wrapper .empty h3{
+  font-size: 18px;
+  color:#666;
+  line-height: normal;
+  margin-bottom: 16px;
+  font-weight: normal;
+}
+.nav-cart-wrapper .empty p{
+  font-size: 14px;
+  color: #999;
+  line-height: normal;
+  font-weight: normal;
+}
+.nav-cart-wrapper .full{
+  position: relative;
+  height: 100%;
+}
+.nav-cart-wrapper .full .nav-cart-items{
+  padding: 14px 0 0;
+  height: 257px;
+  background-color: #fff;
+  overflow-y: auto;
+}
+.nav-cart-wrapper .full .nav-cart-items .cart-item-sell{
+  height: 70px;
+  padding: 0 0px 10px 15px;
+  background-color: #fff;
+}
+.nav-cart-wrapper .full .nav-cart-items .cart-item-sell .item-thumb{
+  background-color: #f4f4f4;
+  position: relative;
+  text-align: center;
+  float: left;
+}
+.nav-cart-wrapper .full .nav-cart-items .cart-item-sell .item-thumb img{
+  width: 60px;
+  height: 60px;
+  border: 0;
+  vertical-align: top;
+}
+.nav-cart-wrapper .full .nav-cart-items .cart-item-sell .item-desc{
+  width: 190px;
+  margin-left: 10px;
+  float: left;
+}
+.nav-cart-wrapper .full .nav-cart-items .cart-item-sell .item-desc .title{
+  font-size: 14px;
+  line-height: 14px;
+  padding: 12px 0 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav-cart-wrapper .full .nav-cart-items .cart-item-sell .item-desc .subTitle{
+  display: block;
+  color: #999;
+  font-size: 11px;
+  line-height: 12px;
+}
+.nav-cart-wrapper .full .nav-cart-items .cart-item-sell .item-desc .subTitle span{
+  margin-right: 8px;
+}
+.nav-cart-wrapper .full .nav-cart-items .cart-item-sell .del-btn{
+  padding-left: 8px;
+  float: left;
+}
+.nav-cart-wrapper .full .nav-cart-items .cart-item-sell .del-btn .icon{
+  font-size: 16px;
+}
+.nav-cart-wrapper .full .nav-cart-total{
+  border-top: 1px solid #e7e1d4;
+  height: 66px;
+  background-color: #f4f0ea;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.nav-cart-wrapper .full .nav-cart-total .totalPrice{
+  line-height: 66px;
+  font-size: 13px;
+  padding-left: 42px;
+  color: #999;
+  float: left;
+}
+.nav-cart-wrapper .full .gotoCart{
+  float: right;
+  margin-right: 31px;
+}
+.nav-cart-wrapper .full .gotoCart .gotoCartBtn{
+  display: inline-block;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  padding: 0;
+  width: 110px;
+  height: 36px;
+  line-height: 36px;
+  margin-top: 4px;
+  vertical-align: middle;
+  letter-spacing: normal;
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  border: 1px solid #b4a078;
+  background-color: #b4a078;
+}
