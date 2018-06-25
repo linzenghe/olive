@@ -116,6 +116,7 @@
   .carousel-wrap .carousel-slider .slick-list{
     position: relative;
     height: 420px;
+    background: #e5e5e5;
   }
   .carousel-wrap .carousel-slider .slick-list li{
     position: absolute;
@@ -178,7 +179,6 @@
     border-radius: 500px;
     border: none;
   }
-
 </style>
 
 
