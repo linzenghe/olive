@@ -5,11 +5,9 @@
   background-color: #fff;
   border-bottom: 1px solid rgba(0,0,0,.24);
 }
-.navbar .container{
-  padding: 10px 0;
-}
 .navbar .navbar-logo{
   float: left;
+  padding: 10px 0;
 }
 .navbar .navbar-logo img{
   width: 180px;
@@ -19,14 +17,41 @@
   float: left;
   padding-left: 75px;
 }
-.navbar .navbar-nav li.nav-item{
+.navbar .navbar-nav>.nav-item{
   float: left;
-  margin:0 25px;
+  padding:0 25px;
   font-size: 14px;
   color: #000;
-  line-height: 60px;
+  line-height: 80px;
   font-weight: bold;
   cursor: pointer;
+  position: relative;
+}
+.navbar .navbar-nav>li.nav-item>.drop-menu{
+  position: absolute;
+  top: 80px;
+  z-index: 99;
+  width: 180px;
+  left: 50%;
+  margin-left: -90px;
+  background: #F5F5F5;
+  padding: 8px 0;
+  display: none;
+}
+.navbar .navbar-nav>li.nav-item>.drop-menu>li>a{
+  display: block;
+  text-align: center;
+  line-height:38px;
+}
+.navbar .navbar-nav>li.nav-item>.drop-menu>li:hover a{
+  background: #DDDDDD;
+  color: #fff;
+}
+.navbar .navbar-nav>.nav-item:hover{
+  background: #ececec;
+}
+.navbar .navbar-nav>.nav-item:hover>.drop-menu{
+  display: block;
 }
 .navbar .navbar-right{
   float: right;
@@ -36,7 +61,8 @@
   margin:0 15px;
   font-size: 14px;
   color: #000;
-  line-height: 60px;
+  height: 80px;
+  line-height: 80px;
   font-weight: bold;
   cursor: pointer;
 }
@@ -44,6 +70,7 @@
   font-size: 20px;
   color: #666;
   font-weight: normal;
+  box-sizing: border-box;
 }
 .navbar .navbar-right li.cart-item{
   position: relative;
@@ -52,7 +79,7 @@
   position: absolute;
   width:  20px;
   height: 20px;
-  top: 8px;
+  top: 18px;
   right: -10px;
   color: #fff;
   text-align: center;
@@ -66,14 +93,15 @@
   background: #000;
   color: #fff;
   padding: 0 30px;
+  height: 46px;
   line-height: 46px;
-  margin:7px 0 7px 15px;
+  margin:17px 0 17px 15px;
 }
 /*购物车*/
 .nav-cart-wrapper{
   position: absolute;
   left: 50%;
-  top: 50px;
+  top: 54px;
   height: 338px;
   width: 330px;
   margin-left: -165px;

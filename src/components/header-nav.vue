@@ -6,15 +6,57 @@
           <img src="@/assets/img/logo.jpg" alt="logo">
         </div>
         <ul class="navbar-nav">
-          <li class="nav-item">标题1</li>
-          <li class="nav-item">标题2</li>
-          <li class="nav-item">标题2</li>
-          <li class="nav-item">标题2</li>
-          <li class="nav-item">标题2</li>
-          <li class="nav-item">标题2</li>
+          <li class="nav-item">
+            <a>标题1</a>
+            <ul class="drop-menu">
+              <li><a>副标题一</a></li>
+              <li><a>副标题二</a></li>
+              <li><a>副标题三</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a>标题2</a>
+            <ul class="drop-menu">
+              <li><a>副标题一</a></li>
+              <li><a>副标题二</a></li>
+              <li><a>副标题三</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a>标题2</a>
+            <ul class="drop-menu">
+              <li><a>副标题一</a></li>
+              <li><a>副标题二</a></li>
+              <li><a>副标题三</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a>标题2</a>
+            <ul class="drop-menu">
+              <li><a>副标题一</a></li>
+              <li><a>副标题二</a></li>
+              <li><a>副标题三</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a>标题2</a>
+            <ul class="drop-menu">
+              <li><a>副标题一</a></li>
+              <li><a>副标题二</a></li>
+              <li><a>副标题三</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a>标题2</a>
+            <ul class="drop-menu">
+              <li><a>副标题一</a></li>
+              <li><a>副标题二</a></li>
+              <li><a>副标题三</a></li>
+            </ul>
+          </li>
         </ul>
         <ul class="navbar-right">
-          <li class="nav-item"><i class="icon icon-sousuo"></i></li>
+          <searchPanel></searchPanel>
           <carPanel></carPanel>
           <li class="nav-item" @click="showLogPop">登录</li>
           <li class="nav-item registerBtn" @click="showRegPop">注册</li>
@@ -28,6 +70,7 @@
 <script>
 import loginPop from './login'
 import carPanel from './car-panel'
+import searchPanel from './search-panel'
 export default {
   data(){
     return{
@@ -36,7 +79,8 @@ export default {
   },
   components:{
     loginPop,
-    carPanel
+    carPanel,
+    searchPanel
   },
   methods:{
     showLogPop(){

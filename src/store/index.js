@@ -19,7 +19,8 @@ let store = new Vuex.Store({
     resLogShow:false,   //登陆注册框
     logShow:false,      //登陆面板
     regShow:false,      //注册面板
-    carShow:false       //显示购物车
+    carShow:false,       //显示购物车
+    searchShow:false,       //显示搜索框
   },
   /*计算*/
   getters:{
@@ -40,6 +41,7 @@ let store = new Vuex.Store({
     }*/
   },
   mutations: {
+    /*登陆注册*/
     showLog(state){
       state.resLogShow=true
       state.logShow=true
@@ -59,11 +61,19 @@ let store = new Vuex.Store({
     gotoReg(state){
       state.regShow=true
     },
+    /*显示隐藏购物车*/
     showCar(state){
       state.carShow=true
     },
     hideCar(state){
       state.carShow=false
+    },
+    /*显示隐藏搜索框*/
+    showSearch(state){
+      state.searchShow=true
+    },
+    hideSearch(state){
+      state.searchShow=false
     },
     /*addCarpanelData(state,data){
       state.carShow=true
