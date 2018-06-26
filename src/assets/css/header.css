@@ -21,11 +21,13 @@
   float: left;
   padding:0 25px;
   font-size: 14px;
-  color: #000;
   line-height: 80px;
-  font-weight: bold;
   cursor: pointer;
   position: relative;
+}
+.navbar .navbar-nav>.nav-item>a{
+  font-weight: bold;
+  color: #000;
 }
 .navbar .navbar-nav>li.nav-item>.drop-menu{
   position: absolute;
@@ -238,6 +240,7 @@
 .nav-cart-wrapper .full .gotoCart{
   float: right;
   margin-right: 31px;
+  line-height: 66px;
 }
 .nav-cart-wrapper .full .gotoCart .gotoCartBtn{
   display: inline-block;
@@ -248,7 +251,6 @@
   width: 110px;
   height: 36px;
   line-height: 36px;
-  margin-top: 4px;
   vertical-align: middle;
   letter-spacing: normal;
   font-size: 12px;

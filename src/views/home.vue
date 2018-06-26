@@ -57,7 +57,7 @@
       <div class="panel-content recommend-panel">
         <div class="panel-title clear">
           <h3 class="fl">推荐商品</h3>
-          <a class="fr more">查看更多</a>
+          <a class="fr more">全部商品</a>
         </div>
         <div class="goods-items clear">
           <a class="goods-item">

@@ -135,3 +135,8 @@ pre {
   box-sizing: border-box;
   padding: 12px 0;
 }
+/*表格*/
+table{
+  border-spacing: 0;
+  border-collapse: collapse;
+}
