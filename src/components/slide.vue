@@ -4,14 +4,14 @@
       <button type="button" class="slick-arrow slick-prev" @click="prev"><i class="icon icon-zuo"></i></button>
       <transition-group tag="ul" class="slick-list" name="list">
         <li v-for="(list,index) in slideList" :key="index" :class="{'slick-active':index===currentIndex}" v-show="index===currentIndex" >
-          <a :href="list.clickUrl" >
+          <a :href="list.clickUrl">
             <img :src="list.imageUrl" :alt="list.desc">
           </a>
         </li>
       </transition-group>
       <button type="button" class="slick-arrow slick-next" @click="next"><i class="icon icon-you"></i></button>
       <ul class="slick-dots">
-        <li v-for="(list,index) in slideList.length" :class="{'slick-active':index===currentIndex}" @mouseover="change(index)">
+        <li v-for="(list,index) in slideList" :class="{'slick-active':index===currentIndex}" @mouseover="change(index)">
           <button></button>
         </li>
       </ul>
@@ -21,9 +21,9 @@
 
 <script>
   export default{
+    props:['slideList'],
     data(){
       return{
-        slideList:[],
         currentIndex:0,
         timer: ''
       }
@@ -70,15 +70,7 @@
           this.autoPlay()
         }, 4000)
       })
-    },
-    mounted(){
-      this.axios.get("/api/homePage").then(response => {
-        this.slideList= response.data.bannerList;
-      }, response => {
-        return false;
-      });
     }
-
   }
 </script>
 <style>

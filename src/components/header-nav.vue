@@ -60,6 +60,12 @@
           <carPanel></carPanel>
           <li class="nav-item" @click="showLogPop">登录</li>
           <li class="nav-item registerBtn" @click="showRegPop">注册</li>
+          <li class="nav-item user-item clear">
+            <div class="imageBox fl">
+              <img src="">
+            </div>
+            <div class="name fl">小花<i class="icon icon-xia"></i></div>
+          </li>
         </ul>
       </div>
     </div>

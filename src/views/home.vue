@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <slide></slide>
+    <slide v-bind:slideList="homeData.bannerList"></slide>
     <div class="container">
       <!--社区活动-->
       <div class="panel-content active-panel">
@@ -9,23 +9,11 @@
           <a class="fr more">查看更多</a>
         </div>
         <div class="active-items clear">
-          <div class="active-item">
-            <div class="imgBox">
-              <img src="">
-            </div>
-            <div class="info">推荐文章标题推荐文章标题推荐文..</div>
-          </div>
-          <div class="active-item">
-            <div class="imgBox">
-              <img src="">
-            </div>
-            <div class="info">推荐文章标题推荐文章标题推荐文..</div>
-          </div>
-          <div class="active-item">
-            <div class="imgBox">
-              <img src="">
-            </div>
-            <div class="info">推荐文章标题推荐文章标题推荐文..</div>
+          <div class="active-item" v-for="(item,index) in homeData.activeList" >
+            <router-link class="imgBox" :to="item.linkUrl">
+              <img :src="item.imageUrl" :alt="item.imageUrl">
+            </router-link>
+            <div class="info"><a>推荐文章标题推荐文章标题推荐文..</a></div>
           </div>
         </div>
       </div>
@@ -36,20 +24,8 @@
           <a class="fr more">查看更多</a>
         </div>
         <div class="teach-items clear">
-          <div class="teach-item">
-            <a><img src=""></a>
-          </div>
-          <div class="teach-item">
-            <a><img src=""></a>
-          </div>
-          <div class="teach-item">
-            <a><img src=""></a>
-          </div>
-          <div class="teach-item">
-            <a><img src=""></a>
-          </div>
-          <div class="teach-item">
-            <a><img src=""></a>
+          <div class="teach-item" v-for="item in homeData.guideList">
+            <router-link :to="item.linkUrl" v-bind:data-id="item.id"><img :src="item.imageUrl"></router-link>
           </div>
         </div>
       </div>
@@ -60,70 +36,20 @@
           <a class="fr more">全部商品</a>
         </div>
         <div class="goods-items clear">
-          <a class="goods-item">
-            <div class="imageBox">
-              <img src="">
-            </div>
+          <div class="goods-item" v-for="item in homeData.goodsList">
+            <a class="imageBox">
+              <img :src="item.bannerUrl">
+            </a>
             <div class="info">
-              <h5>推荐商品主标题一行完全展现完全展现..</h5>
+              <h5><a>{{item.name}}</a></h5>
               <div class="sub-info clear">
                 <ul class="labels">
-                  <li>标签</li>
-                  <li>标签</li>
-                  <li>标签</li>
+                  <li v-for="label in item.labels.split(',')">{{label}}</li>
                 </ul>
-                <p class="price">￥250</p>
+                <p class="price">￥{{item.price}}</p>
               </div>
             </div>
-          </a>
-          <a class="goods-item">
-            <div class="imageBox">
-              <img src="">
-            </div>
-            <div class="info">
-              <h5>推荐商品主标题一行完全展现完全展现..</h5>
-              <div class="sub-info clear">
-                <ul class="labels">
-                  <li>标签</li>
-                  <li>标签</li>
-                  <li>标签</li>
-                </ul>
-                <p class="price">￥250</p>
-              </div>
-            </div>
-          </a>
-          <a class="goods-item">
-            <div class="imageBox">
-              <img src="">
-            </div>
-            <div class="info">
-              <h5>推荐商品主标题一行完全展现完全展现..</h5>
-              <div class="sub-info clear">
-                <ul class="labels">
-                  <li>标签</li>
-                  <li>标签</li>
-                  <li>标签</li>
-                </ul>
-                <p class="price">￥250</p>
-              </div>
-            </div>
-          </a>
-          <a class="goods-item">
-            <div class="imageBox">
-              <img src="">
-            </div>
-            <div class="info">
-              <h5>推荐商品主标题一行完全展现完全展现..</h5>
-              <div class="sub-info clear">
-                <ul class="labels">
-                  <li>标签</li>
-                  <li>标签</li>
-                  <li>标签</li>
-                </ul>
-                <p class="price">￥250</p>
-              </div>
-            </div>
-          </a>
+          </div>
         </div>
       </div>
       <div class="panel-content story-panel">
@@ -173,12 +99,20 @@ import service from '@/components/service'
 export default {
   data(){
     return {
-
+      homeData:{},
     }
   },
   components: {
     slide,
     service
+  },
+  mounted(){
+    this.axios.get("/api/home").then(response => {
+      this.homeData= response.data;
+      console.log(this.homeData);
+    }, response => {
+      return false;
+    });
   }
 }
 </script>
@@ -211,6 +145,7 @@ export default {
     box-sizing: border-box;
   }
   .active-items .active-item .imgBox{
+    display: block;
     width: 100%;
     height: 418px;
     background: #F5F5F5;
@@ -259,6 +194,7 @@ export default {
     margin-bottom: 20px;
   }
   .goods-items .goods-item .imageBox{
+    display: block;
     width: 100%;
     height: 282px;
     background: #D8D8D8;
