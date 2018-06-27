@@ -52,7 +52,10 @@ let store = new Vuex.Store({
     hideSearch(state){
       state.searchShow=false
     },
-
+    /*发送验证码*/
+    sendCode(state){
+      
+    }
   }
 });
 

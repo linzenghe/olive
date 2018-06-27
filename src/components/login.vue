@@ -10,16 +10,16 @@
             <div class="title">会员登录</div>
             <form class="form" id="loginForm" role="form">
               <div class="item">
-                <input class="item-input" type="text" placeholder="输入手机号码">
+                <input class="item-input" v-model="phone" type="text" placeholder="输入手机号码">
               </div>
               <div class="item">
-                <button class="item-button" type="button">获取验证码</button>
+                <button class="item-button" type="button"  @click="sendCode(phone)" :disabled="sendDisabled">获取验证码</button>
               </div>
               <div class="item">
-                <input class="item-input" type="text" placeholder="输入短信验证码">
+                <input class="item-input" v-model="captcha" type="text" placeholder="输入短信验证码">
               </div>
               <div class="submit-item">
-                <button class="item-button" type="button">登录</button>
+                <button class="item-button" type="button" @click="login" :disabled="loginDisabled">登录</button>
               </div>
               <div class="other_login clear">
                 <p class="fl">社交账号快捷登录</p>
@@ -43,7 +43,7 @@
                 <button class="item-button" type="button">获取验证码</button>
               </div>
               <div class="item">
-                <input class="item-input" type="text" placeholder="输入短信验证码">
+                <input class="item-input" type="text" placeholder="输入短信验证码" >
               </div>
               <div class="agreement">
                 <label><input type="checkbox" class="hide" checked><i class="icon icon-check-box-blank"></i>同意网站服务条款</label>
@@ -71,7 +71,10 @@
 export default{
   data(){
     return{
-
+      phone:'',
+      captcha:'',
+      sendDisabled:false,   //发送验证码防多点击
+      loginDisabled:false,   //发送验证码防多点击
     }
   },
   methods:{
@@ -86,6 +89,28 @@ export default{
       this.$store.state.logShow=true;
       this.$store.state.regShow=false;
     },
+    /*发送验证码*/
+    sendCode(phone){
+      if(phone==''){
+        this.$layer.msg("电话号码不能为空！");
+      }else{
+        this.axios.post("/api/captcha",{phone:phone}).then(response => {
+          this.captcha=response.data.captcha
+        }, response => {
+          console.log(response)
+          this.$layer.msg("发送失败");
+          return false;
+        });
+      }
+    },
+    login(){
+      this.axios.post("/api/login",{phone:this.phone,captcha:this.captcha}).then(response => {
+        this.$layer.msg("登录成功！");
+      }, response => {
+        console.log(response)
+        this.$layer.msg("登录失败");
+      });
+    }
   },
   computed:{
     resLogShow(){
@@ -123,7 +148,7 @@ export default{
     width: 100%;
     height: 100%;
     overflow: hidden;
-    z-index: 999;
+    z-index: 100;
   }
   .loginPop .loginPop-overlay .loginPop-m{
     width: 360px;

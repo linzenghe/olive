@@ -135,6 +135,9 @@ pre {
   box-sizing: border-box;
   padding: 12px 0;
 }
+.form .item .item-button:disabled,.form .submit-item .item-button:disabled{
+  cursor: no-drop;
+}
 /*表格*/
 table{
   border-spacing: 0;
