@@ -21,7 +21,10 @@
 
 <script>
   export default{
-    props:['slideList'],
+    props:{
+      slideList:Array,
+      required:true
+    },
     data(){
       return{
         currentIndex:0,

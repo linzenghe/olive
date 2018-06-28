@@ -99,6 +99,9 @@
   line-height: 46px;
   margin:17px 0 17px 15px;
 }
+.navbar .navbar-right .user-item{
+  position: relative;
+}
 .navbar .navbar-right .user-item .imageBox{
   width: 48px;
   height: 48px;
@@ -117,6 +120,30 @@
   font-size: 14px;
   color: #999;
   margin-left: 8px;
+}
+.navbar .navbar-right .user-item .drop-menu{
+  position: absolute;
+  top: 80px;
+  right: 0;
+  width: 100%;
+  background: #fff;
+  z-index: 99;
+  overflow: visible;
+  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, .06), 0 20px 40px rgba(0, 0, 0, .15);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .06), 0 20px 40px rgba(0, 0, 0, .15);
+}
+.navbar .navbar-right .user-item .drop-menu li{
+  line-height: normal;
+}
+.navbar .navbar-right .user-item .drop-menu li a{
+  line-height: 48px;
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+.navbar .navbar-right .user-item .drop-menu li a:hover{
+  background: #DDDDDD;
 }
 /*购物车*/
 .nav-cart-wrapper{

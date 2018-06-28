@@ -11,6 +11,9 @@ import Center from '@/views/center'
 import CustomerInfo from '@/views/customer/userinfo'
 import CustomerAddress from '@/views/customer/address'
 import CustomerOrder from '@/views/customer/order'
+import NoFound  from '@/views/404'
+import ServerError from '@/views/500'
+import Login from '@/views/login'
 
 
 
@@ -22,6 +25,7 @@ import PageFive from '../views/page_Five'
 import Item from '../views/item'
 import Cart from '../views/cart'
 
+
 const router = new Router({
   mode:'history',
   routes: [
@@ -29,25 +33,31 @@ const router = new Router({
     {
       path: '/customer',
       component: Center,
+      meta:{requireAuth:true},
       children: [
         {
           path: 'info',
           name: 'Info',
+          meta:{requireAuth:true},
           component: CustomerInfo
         },
         {
           path: 'address',
           name: 'Address',
+          meta:{requireAuth:true},
           component: CustomerAddress
         },
         {
           path: 'order',
           name: 'Order',
+          meta:{requireAuth:true},
           component: CustomerOrder
         }
       ],
     },
-
+    {path:'/login',component:Login},
+    {path:'/404',component:NoFound},
+    {path:'/500',component:ServerError},
 
     /*旧*/
     {path:'/PageOne',component:PageOne},
@@ -59,19 +69,4 @@ const router = new Router({
     {path:'/Cart',name:'Cart',component:Cart}
   ]
 })
-
-/*router.beforeEach((to, from, next) => {
-  if (to.matched.some(res => res.meta.requireAuth)) {// 判断是否需要登录权限
-    if (localStorage.getItem('token')) {// 判断是否登录
-      next()
-    } else {// 没登录则跳转到登录界面
-      next({
-        path: '/',
-        query: {redirect: to.fullPath}
-      })
-    }
-  } else {
-    next()
-  }
-})*/
 export default router

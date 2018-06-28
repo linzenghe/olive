@@ -1,5 +1,5 @@
 <template>
-    <div id="loginPop" class="loginPop" v-if="resLogShow">
+  <div id="loginPop" class="loginPop" v-if="resLogShow">
     <div class="pop-mask"></div>
     <div class="loginPop-overlay">
       <div class="loginPop-m">
@@ -8,24 +8,25 @@
           <!--登录-->
           <div class="loginPop-c" v-if="logShow">
             <div class="title">会员登录</div>
-            <form class="form" id="loginForm" role="form">
-              <div class="item">
-                <input class="item-input" v-model="phone" type="text" placeholder="输入手机号码">
-              </div>
-              <div class="item">
-                <button class="item-button" type="button"  @click="sendCode(phone)" :disabled="sendDisabled">获取验证码</button>
-              </div>
-              <div class="item">
-                <input class="item-input" v-model="captcha" type="text" placeholder="输入短信验证码">
-              </div>
-              <div class="submit-item">
-                <button class="item-button" type="button" @click="login" :disabled="loginDisabled">登录</button>
-              </div>
-              <div class="other_login clear">
-                <p class="fl">社交账号快捷登录</p>
-                <i class="icon icon-wechat fr"></i>
-              </div>
-            </form>
+              <form class="form" id="loginForm" role="form" novalidate>
+                <div class="item">
+                  <input class="item-input" v-model="phone" type="text" placeholder="输入手机号码">
+                </div>
+                <div class="item">
+                  <button class="item-button" type="button"  @click="sendCode(phone)" :disabled="sendDisabled">获取验证码</button>
+                </div>
+                <div class="item">
+                  <input class="item-input" v-model="captcha" type="text" placeholder="输入短信验证码">
+                </div>
+                <div class="submit-item">
+                  <button class="item-button" type="button" @click="login" :disabled="loginDisabled">登录</button>
+                </div>
+                <div class="other_login clear">
+                  <p class="fl">社交账号快捷登录</p>
+                  <i class="icon icon-wechat fr"></i>
+                </div>
+              </form>
+
             <div class="pop-bottom">
               <div class="bottom-item">
                 <button class="item-button" @click="gotoReg">前往注册</button>
@@ -37,13 +38,13 @@
             <div class="title">注册账号</div>
             <form class="form" id="regForm" role="form">
               <div class="item">
-                <input class="item-input" type="text" placeholder="输入手机号码">
+                <input class="item-input" type="text" v-model="regPhone" placeholder="输入手机号码">
               </div>
               <div class="item">
-                <button class="item-button" type="button">获取验证码</button>
+                <button class="item-button" type="button" @click="sendRegCode(regPhone)" >获取验证码</button>
               </div>
               <div class="item">
-                <input class="item-input" type="text" placeholder="输入短信验证码" >
+                <input class="item-input" type="text"  v-model="regCaptcha" placeholder="输入短信验证码" >
               </div>
               <div class="agreement">
                 <label><input type="checkbox" class="hide" checked><i class="icon icon-check-box-blank"></i>同意网站服务条款</label>
@@ -68,13 +69,22 @@
   </div>
 </template>
 <script>
+import {setCookie,getCookie} from '../assets/js/cookie.js'
 export default{
   data(){
     return{
       phone:'',
       captcha:'',
+      regPhone:'',
+      regCaptcha:'',
       sendDisabled:false,   //发送验证码防多点击
       loginDisabled:false,   //发送验证码防多点击
+    }
+  },
+  mounted(){
+    /*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*/
+    if(getCookie('username')){
+      console.log(getCookie('username'));
     }
   },
   methods:{
@@ -97,19 +107,29 @@ export default{
         this.axios.post("/api/captcha",{phone:phone}).then(response => {
           this.captcha=response.data.captcha
         }, response => {
-          console.log(response)
           this.$layer.msg("发送失败");
           return false;
         });
       }
     },
     login(){
-      this.axios.post("/api/login",{phone:this.phone,captcha:this.captcha}).then(response => {
-        this.$layer.msg("登录成功！");
-      }, response => {
-        console.log(response)
-        this.$layer.msg("登录失败");
-      });
+      if(this.phone == ""|| this.captcha == ""){
+        this.$layer.msg('请输入手机号或验证码');
+      }else{
+        let data={'phone':this.phone,'captcha':this.captcha}
+        this.axios.post("/api/login",data).then(response => {
+          this.$layer.msg("登录成功！");
+          let userInfo={'username':response.data.name,'portraitUrl':response.data.portraitUrl}
+          setCookie('userInfo',JSON.stringify(userInfo),1000*60);
+          this.$emit('listenToLogin',userInfo);
+          setTimeout(function () {
+            this.$store.commit('hideResLog');
+          }.bind(this),500)
+        }, response => {
+          console.log(response)
+          this.$layer.msg("登录失败");
+        });
+      }
     }
   },
   computed:{

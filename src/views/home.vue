@@ -107,9 +107,10 @@ export default {
     service
   },
   mounted(){
+
+
     this.axios.get("/api/home").then(response => {
       this.homeData= response.data;
-      console.log(this.homeData);
     }, response => {
       return false;
     });
