@@ -14,19 +14,13 @@ Vue.use(Validator)
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
 
-/*手机验证*/
-Vue.validator('tel', function (val) {
-  let length=val.length;
-  let mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
-  return (length==11&&mobile.test(val))
-});
-
 Vue.prototype.$layer = layer(Vue, {
   msgtime: 1.5,//目前只有一项，即msg方法的默认消失时间，单位：秒
 });
 
+/*导航守卫*/
 router.beforeEach((to,from,next)=>{
-  delCookie('userInfo');
+  // delCookie('userInfo');
   if(to.meta.requireAuth){
     axios.get("/api/current").then(response => {
       let userInfo={'username':response.data.name,'portraitUrl':response.data.portraitUrl}

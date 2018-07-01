@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-
+import {setCookie,getCookie,delCookie} from '../assets/js/cookie'
 Vue.use(Vuex)
 /*第二步创建一个store*/
 let store = new Vuex.Store({
@@ -11,7 +10,12 @@ let store = new Vuex.Store({
     regShow:false,      //注册面板
     carShow:false,       //显示购物车
     searchShow:false,       //显示搜索框
-    loginStatue:false,      //登录状态
+
+    loginStatus:false,      //登录状态
+    userInfo:{              //用户信息
+      username:'',
+      portraitUrl:''
+    },
   },
   /*计算*/
   getters:{
@@ -54,7 +58,24 @@ let store = new Vuex.Store({
     },
     /*发送验证码*/
     sendCode(state){
-      
+
+    },
+
+    /*获取登录cookie*/
+    getCookie(state){
+      if(getCookie('userInfo')){
+        let uInfo = JSON.parse(getCookie('userInfo'));
+        state.userInfo=uInfo;
+        state.loginStatus=true;
+      }else{
+        state.loginStatus=false;
+      }
+    },
+    /*删除cookie*/
+    delCookie(state){
+      state.userInfo={username:'', portraitUrl:'',};
+      state.loginStatus=false;
+      delCookie('userInfo');
     }
   }
 });

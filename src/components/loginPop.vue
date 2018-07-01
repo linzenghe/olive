@@ -121,7 +121,8 @@ export default{
           this.$layer.msg("登录成功！");
           let userInfo={'username':response.data.name,'portraitUrl':response.data.portraitUrl}
           setCookie('userInfo',JSON.stringify(userInfo),1000*60);
-          this.$emit('listenToLogin',userInfo);
+          this.$store.state.userInfo=userInfo;
+          this.$store.state.loginStatus=true;
           setTimeout(function () {
             this.$store.commit('hideResLog');
           }.bind(this),500)

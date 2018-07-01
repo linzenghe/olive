@@ -57,7 +57,7 @@
         </ul>
       </div>
     </div>
-    <loginPop v-on:listenToLogin="loginEnd"></loginPop>
+    <loginPop></loginPop>
   </div>
 </template>
 
@@ -69,13 +69,16 @@ import {setCookie,getCookie,delCookie} from '../assets/js/cookie'
 export default {
   data(){
     return{
-      userInfo:{          /*用户信息*/
-        username:'',
-        portraitUrl:'',
-      },
-      loginStatus:false,  /*登录状态*/
       userNav:false,
     }
+  },
+  computed:{
+    userInfo(){
+      return this.$store.state.userInfo
+    },
+    loginStatus(){
+      return this.$store.state.loginStatus
+    },
   },
   components:{
     loginPop,
@@ -89,10 +92,6 @@ export default {
     showRegPop(){
       this.$store.commit('showReg');
     },
-    loginEnd(data){
-      this.userInfo=data;
-      this.loginStatus=true;
-    },
     userShowhandle(){
       this.userNav=true
     },
@@ -101,9 +100,8 @@ export default {
     },
     exit(){
       this.axios.get("/api/logout").then(response => {
-        this.userInfo={username:'', portraitUrl:''};
-        this.loginStatus=false;
-        delCookie('userInfo');
+        this.$layer.msg('退出成功');
+        this.$store.commit('delCookie');
       }, response => {
         this.$layer.msg('退出失败');
         return false;
@@ -111,13 +109,7 @@ export default {
     }
   },
   mounted(){
-    if(getCookie('userInfo')){
-      let uInfo = JSON.parse(getCookie('userInfo'));
-      this.userInfo=uInfo;
-      this.loginStatus=true;
-    }else{
-      this.loginStatus=false;
-    }
+    return this.$store.commit('getCookie');
   }
 }
 </script>
