@@ -14,7 +14,7 @@ import CustomerOrder from '@/views/customer/order'
 import NoFound  from '@/views/404'
 import ServerError from '@/views/500'
 import Login from '@/views/login'
-
+import goodsList from '@/views/goodsList'
 
 
 import PageOne from '../views/page_one'
@@ -58,6 +58,9 @@ const router = new Router({
     {path:'/login',component:Login},
     {path:'/404',component:NoFound},
     {path:'/500',component:ServerError},
+    {path:'/search/keyword=:id',name:'keyword',component:goodsList},
+
+
 
     /*旧*/
     {path:'/PageOne',component:PageOne},

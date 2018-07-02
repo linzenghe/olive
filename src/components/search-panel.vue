@@ -3,9 +3,9 @@
     <i class="icon icon-sousuo"></i>
     <div class="search-wrapper" v-show="searchShow">
       <div class="search">
-        <div class="search-box">
-          <input placeholder="输入搜索内容" type="search">
-          <span class="del"><i class="icon icon-close"></i></span>
+        <div class="search-box" @blur="focus=false">
+          <input placeholder="输入搜索内容" v-model="keyword" type="search">
+          <span class="del"><i class="icon icon-close" v-show="focus" @click="delKey"></i></span>
         </div>
         <button class="search-btn"><i class="icon icon-sousuo"></i></button>
       </div>
@@ -22,6 +22,12 @@
 
 <script>
   export default {
+    data(){
+      return{
+        keyword:'',
+        focus:false
+      }
+    },
     computed:{
       searchShow(){
         return this.$store.state.searchShow
@@ -34,8 +40,21 @@
       searchHidehandle(){
         this.$store.commit('hideSearch')
       },
+      delKey(){
+        this.keyword=''
+      }
+    },
+    watch:{
+      keyword:{
+        handler:function(){
+          if(this.keyword==''){
+            this.focus=false
+          }else{
+            this.focus=true
+          }
+        }
+      }
     }
-
   }
 </script>
 <style>
@@ -86,7 +105,7 @@
     border: 1px solid #eaeaea;
     line-height: 36px;
     width: 100%;
-    padding:0 10px;
+    padding:0 20px 0 10px;
     position: relative;
     box-sizing: border-box;
   }

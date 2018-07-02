@@ -102,6 +102,7 @@ export default {
       this.axios.get("/api/logout").then(response => {
         this.$layer.msg('退出成功');
         this.$store.commit('delCookie');
+        location.reload()
       }, response => {
         this.$layer.msg('退出失败');
         return false;
