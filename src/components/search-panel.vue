@@ -1,19 +1,18 @@
 <template>
-  <li class="nav-item search-item" @mouseenter="searchShowhandle" @mouseleave="searchHidehandle">
+  <li class="nav-item search-item" ref="search" @click="searchShowhandle">
     <i class="icon icon-sousuo"></i>
-    <div class="search-wrapper" v-show="searchShow">
+    <div class="search-wrapper" id="search-wrapper" v-show="searchShow">
       <div class="search">
-        <div class="search-box" @blur="focus=false">
+        <div class="search-box">
           <input placeholder="输入搜索内容" v-model="keyword" type="search">
           <span class="del"><i class="icon icon-close" v-show="focus" @click="delKey"></i></span>
         </div>
-        <button class="search-btn"><i class="icon icon-sousuo"></i></button>
+        <button class="search-btn" @click.stop="search(keyword)"><i class="icon icon-sousuo"></i></button>
       </div>
-      <div class="search-history">
-        <div class="clear title"><span class="fl">最近搜索</span><i class="icon icon-del fr"></i></div>
+      <div class="search-history" v-if="searchLog.length!=0">
+        <div class="clear title"><span class="fl">最近搜索</span><i class="icon icon-del fr" @click="delHistory"></i></div>
         <ul>
-          <li>骑士</li>
-          <li>勇士</li>
+          <li v-for="item in searchLog" @click.stop="historySearch(item.log)">{{item.log}}</li>
         </ul>
       </div>
     </div>
@@ -21,11 +20,13 @@
 </template>
 
 <script>
+  import {setCookie,getCookie,delCookie} from '../assets/js/cookie'
   export default {
     data(){
       return{
         keyword:'',
-        focus:false
+        focus:false,
+        searchLog:[]
       }
     },
     computed:{
@@ -35,13 +36,56 @@
     },
     methods:{
       searchShowhandle(){
-        this.$store.commit('showSearch')
+        this.$store.commit('showSearch');
       },
       searchHidehandle(){
-        this.$store.commit('hideSearch')
+        this.$store.commit('hideSearch');
       },
       delKey(){
         this.keyword=''
+      },
+      /*查询*/
+      search(keyword){
+        this.$store.commit('hideSearch');
+        let logJson={};
+        if(keyword==''){
+          this.$router.push({name:'search',query:{keyword:''}});
+        }else{
+          keyword=keyword.replace(/(^\s*)|(\s*$)/g, "");
+          logJson.log=keyword;
+          for(var i in this.searchLog){
+            if(this.searchLog[i].log==keyword){
+              this.searchLog.splice(i, 1)
+            }
+          }
+          this.searchLog.splice(0,0,logJson);
+          if(this.searchLog.length>6){
+            this.searchLog.splice(6,this.searchLog.length);
+          }
+          setCookie('searchLog',JSON.stringify(this.searchLog),1000*60);
+          this.$router.push({name:'search',query:{keyword:keyword}});
+        }
+      },
+      historySearch(historylog){
+        this.$store.commit('hideSearch');
+        let logJson={};
+        logJson.log=historylog;
+        for(var i in this.searchLog){
+          if(this.searchLog[i].log==historylog){
+            this.searchLog.splice(i, 1)
+          }
+        }
+        this.searchLog.splice(0,0,logJson);
+        if(this.searchLog.length>6){
+          this.searchLog.splice(6,this.searchLog.length);
+        }
+        setCookie('searchLog',JSON.stringify(this.searchLog),1000*60);
+        this.$router.push({name:'search',query:{keyword:historylog}});
+      },
+      /*删除历史记录*/
+      delHistory(){
+        this.searchLog=[];
+        delCookie('searchLog');
       }
     },
     watch:{
@@ -54,7 +98,23 @@
           }
         }
       }
-    }
+    },
+    mounted(){
+      /*页面挂载获取cookie，如果存在查询的cookie*/
+      if(getCookie('searchLog')){
+        let history=JSON.parse(getCookie('searchLog'));
+        if(history.length>6){
+          history.splice(6,history.length);
+        }
+        this.searchLog=history;
+      }
+      let _this=this;
+      document.addEventListener('click',function (e) {
+        if(!!_this.$refs.search.contains(e.target)) return
+          _this.$store.commit('hideSearch');
+
+      })
+    },
   }
 </script>
 <style>
@@ -155,6 +215,7 @@
   .search-wrapper .search-history ul{
     line-height: normal;
     margin-top: 8px;
+    overflow-y: auto;
   }
   .search-wrapper .search-history ul li{
     font-size: 13px;
@@ -162,6 +223,9 @@
     color: #333;
     cursor: pointer;
     padding: 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
   }
   .search-wrapper .search-history ul li:hover{
     background: #e5e5e5;

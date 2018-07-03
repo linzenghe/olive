@@ -1,23 +1,19 @@
 <template>
   <div id="goodsList" class="container goodsList">
-    <div class="crumbs"><span>搜索结果<i class="icon icon-you"></i></span><span>关键字</span></div>
+    <div class="crumbs"><span>搜索结果<i class="icon icon-you"></i></span><span>{{searchKeyword?searchKeyword:'全部'}}</span></div>
     <div class="category-h">
       <div class="category-b">
         <div class="cate-items">
           <div class="cate-item cate clear">
             <label class="fl">类别</label>
             <ul class="fl cateList">
-              <li>二级类别1</li>
-              <li>二级类别2</li>
-              <li>二级类别3</li>
+              <li v-for="item in cate" @click="cateSearch(item.name)" :class="searchDate.level==item.name?'active':''">{{item.name}}</li>
             </ul>
           </div>
           <div class="cate-item add clear">
             <label class="fl">产地</label>
             <ul class="fl cateList">
-              <li>产地名称1</li>
-              <li>产地名称2</li>
-              <li>产地名称3</li>
+              <li v-for="item in add" @click="originSearch(item.name)" :class="searchDate.origin==item.name?'active':''">{{item.name}}</li>
             </ul>
           </div>
         </div>
@@ -45,15 +41,18 @@
             </ul>
           </div>
           <div class="fr sort-right">
-            <p>搜索到<span>200</span>条相似结果</p>
+            <p>搜索到<span>{{total}}</span>条相似结果</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="goods-items">
-      <!--<goodsItem v-for="(item,index) in homeData.goodsList"  :key='index' :item='item'></goodsItem>-->
+    <div class="goods-items clear">
+      <goodsItem v-for="(item,index) in goodsList"  :key='index' :item='item'></goodsItem>
     </div>
-    <pagination :page-no="pageNo" :current.sync="currentPage"></pagination>
+    <div class="noResult" v-if="goodsList.length==0">
+      <p class="tip">未搜索到结果</p>
+    </div>
+    <pagination :total="total" :current-page='current' @pagechange="pagechange" v-if="goodsList.length!=0"></pagination>
   </div>
 </template>
 
@@ -63,26 +62,71 @@ import pagination from '@/components/pagination'
 export default {
   data(){
     return {
-      currentPage: 1,
-      pageNo:10,
+      total: 150,     // 记录总条数
+      display: 10,    // 每页显示条数
+      current: 1,     // 当前的页数
+      goodsList:[],   // 商品数据
+      url:{},         // 当前路由
+      /*类别*/
+      cate:[{name:'一级A货'},{name:'二级B货'},{name:'三级C货'}],
+      /*产地*/
+      add:[{name:'中国'},{name:'法国'},{name:'西班牙'}],
+      /*搜索参数*/
+      searchDate:{
+        content: '',      //内容
+        categoryId: '',    //品类id
+        level: '',         //品类等级
+        origin: '',        //产地
+        salesVolume: '',   //销量排序
+        recommend: '',     //推荐
+        price: '',         //价格排序
+        startPrice: '',    //起始价格
+        endPrice: '',      //最高价格
+        pageIndex: 0,    //起始页
+        pageSize: 10,    //个数
+      }
+    }
+  },
+  computed:{
+    searchKeyword(){
+      let searchKeyword='';
+      this.searchDate.content=this.$route.query.keyword;
+      this.url=this.$route.query;
+      return searchKeyword=this.$route.query.keyword;
     }
   },
   components: {
     goodsItem,
-    pagination
+    pagination,
   },
   mounted(){
-
-  },
-  watch: {
-    currentPage: 'requestData'
-  },
-  ready(){
-    this.requestData()
+    this.axios.post("/api/goods/search",this.searchDate).then(response => {
+      this.goodsList=response.data.list;
+      this.total=response.data.count;
+    }, response => {
+      this.$layer.msg("搜索失败");
+      console.log(response.data);
+    });
   },
   methods:{
-    requestData(){
-
+    pagechange(currentPage){
+      // ajax请求, 向后台发送 currentPage, 来获取对应的数据
+      this.searchDate.pageIndex=currentPage-1;
+      this.axios.post("/api/goods/search",this.searchDate).then(response => {
+        this.goodsList=response.data.list;
+        this.total=response.data.count;
+      }, response => {
+        this.$layer.msg("获取数据失败");
+        console.log(response.data);
+      });
+    },
+    cateSearch(cateName){
+      this.url.level=cateName;
+      console.log(this.url);
+      this.$router.push({name:'search',query:this.url});
+    },
+    originSearch(originName){
+      console.log(originName)
     }
   }
 
@@ -131,6 +175,9 @@ export default {
     margin-right: 40px;
     margin-bottom: 8px;
     cursor: pointer;
+  }
+  .goodsList .category-h .cate-item .cateList li.active{
+    color: #b4a078;
   }
   .goodsList .category-h .sort{
     margin-bottom: 16px;
@@ -213,5 +260,22 @@ export default {
   .goodsList .category-h .sort .sort-left .sort_list li.priceRange .submit>a{
     line-height: 26px;
     margin-left: 4px;
+  }
+  .goods-items{
+    margin-left: -12px;
+    margin-right: -12px;
+    padding-top: 8px;
+  }
+  .noResult{
+    padding: 0 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .noResult .tip{
+    margin-top: 56px;
+    margin-bottom: 56px;
+    font-size: 16px;
+    font-weight: normal;
   }
 </style>

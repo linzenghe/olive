@@ -35,30 +35,15 @@ const router = new Router({
       component: Center,
       meta:{requireAuth:true},
       children: [
-        {
-          path: 'info',
-          name: 'Info',
-          meta:{requireAuth:true},
-          component: CustomerInfo
-        },
-        {
-          path: 'address',
-          name: 'Address',
-          meta:{requireAuth:true},
-          component: CustomerAddress
-        },
-        {
-          path: 'order',
-          name: 'Order',
-          meta:{requireAuth:true},
-          component: CustomerOrder
-        }
+        {path: 'info', name: 'Info', meta:{requireAuth:true}, component: CustomerInfo},
+        {path: 'address', name: 'Address', meta:{requireAuth:true}, component: CustomerAddress},
+        {path: 'order', name: 'Order', meta:{requireAuth:true}, component: CustomerOrder}
       ],
     },
     {path:'/login',component:Login},
     {path:'/404',component:NoFound},
     {path:'/500',component:ServerError},
-    {path:'/search/keyword=:id',name:'keyword',component:goodsList},
+    {path:'/search',name:'search',component:goodsList},
 
 
 
