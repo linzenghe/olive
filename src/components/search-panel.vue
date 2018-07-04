@@ -46,10 +46,12 @@
       },
       /*查询*/
       search(keyword){
+        let timestamp=new Date().getTime();
         this.$store.commit('hideSearch');
         let logJson={};
         if(keyword==''){
-          this.$router.push({name:'search',query:{keyword:''}});
+          this.$router.push({name:'search',query:{content:'',timeStamp:timestamp}});
+          this.$router.go(0);
         }else{
           keyword=keyword.replace(/(^\s*)|(\s*$)/g, "");
           logJson.log=keyword;
@@ -63,14 +65,16 @@
             this.searchLog.splice(6,this.searchLog.length);
           }
           setCookie('searchLog',JSON.stringify(this.searchLog),1000*60);
-          this.$router.push({name:'search',query:{keyword:keyword}});
+          this.$router.push({name:'search',query:{content:keyword,timeStamp:timestamp}});
+          this.$router.go(0);
         }
       },
       historySearch(historylog){
+        let timestamp=new Date().getTime();
         this.$store.commit('hideSearch');
         let logJson={};
         logJson.log=historylog;
-        for(var i in this.searchLog){
+        for(let i in this.searchLog){
           if(this.searchLog[i].log==historylog){
             this.searchLog.splice(i, 1)
           }
@@ -80,7 +84,8 @@
           this.searchLog.splice(6,this.searchLog.length);
         }
         setCookie('searchLog',JSON.stringify(this.searchLog),1000*60);
-        this.$router.push({name:'search',query:{keyword:historylog}});
+        this.$router.push({name:'search',query:{content:historylog,timeStamp:timestamp}});
+        this.$router.go(0);
       },
       /*删除历史记录*/
       delHistory(){
@@ -97,7 +102,7 @@
             this.focus=true
           }
         }
-      }
+      },
     },
     mounted(){
       /*页面挂载获取cookie，如果存在查询的cookie*/
@@ -112,7 +117,6 @@
       document.addEventListener('click',function (e) {
         if(!!_this.$refs.search.contains(e.target)) return
           _this.$store.commit('hideSearch');
-
       })
     },
   }

@@ -76,7 +76,7 @@ let store = new Vuex.Store({
       state.userInfo={username:'', portraitUrl:'',};
       state.loginStatus=false;
       delCookie('userInfo');
-    }
+    },
   }
 });
 

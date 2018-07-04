@@ -47,6 +47,9 @@
     border: 1px solid #979797;
     box-shadow: 0 2px 12px 0 rgba(0,0,0,0.24);
   }
+  .goods-item .imageBox img{
+    width: 100%;
+  }
   .goods-item .info{
     padding-top: 22px;
   }
