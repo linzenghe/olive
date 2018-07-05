@@ -15,6 +15,9 @@ import NoFound  from '@/views/404'
 import ServerError from '@/views/500'
 import Login from '@/views/login'
 import goodsList from '@/views/goodsList'
+import goodsDetail from '@/views/goodsDetail'
+
+
 
 
 import PageOne from '../views/page_one'
@@ -44,6 +47,8 @@ const router = new Router({
     {path:'/404',component:NoFound},
     {path:'/500',component:ServerError},
     {path:'/search',name:'search',component:goodsList},
+    {path:'/goods',name:'goods',component:goodsDetail},
+
 
 
 

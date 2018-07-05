@@ -1,10 +1,10 @@
 <template>
   <div class="goods-item">
-    <a class="imageBox">
+    <router-link class="imageBox" :to="{name: 'goods', query: {goodsId:item.id}}">
       <img :src="item.bannerUrl">
-    </a>
+    </router-link>
     <div class="info">
-      <h5><a>{{item.name}}</a></h5>
+      <h5><router-link :to="{name: 'goods', query: {goodsId:item.id}}">{{item.name}}</router-link></h5>
       <div class="sub-info clear">
         <ul class="labels">
           <li v-for="label in item.labels.split(',')">{{label}}</li>

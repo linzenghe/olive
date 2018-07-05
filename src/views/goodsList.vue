@@ -87,7 +87,6 @@ export default {
         pageIndex: 0,    //起始页
         pageSize: 12,    //个数
       },
-
       priceSearchShow:false,    //显示查询价格按钮
     }
   },
