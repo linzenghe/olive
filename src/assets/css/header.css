@@ -193,10 +193,11 @@
   text-align: center;
 }
 .nav-cart-wrapper .empty .icon{
-  font-size: 60px;
+  font-size: 40px!important;
+  font-weight: normal;
   color: #999;
   line-height: normal;
-  margin: 40px 0 20px;
+  margin: 50px 0 20px;
   display: inline-block;
 }
 .nav-cart-wrapper .empty h3{

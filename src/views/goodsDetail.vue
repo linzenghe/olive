@@ -6,14 +6,14 @@
         <div class="gallery">
           <div class="thumb">
             <ul>
-              <li class="on"><img :src="goodsDate.imageList[currentImageNum]"></li>
+              <li class="on"><img :src="goodsShowImg"></li>
             </ul>
           </div>
           <div class="thumbnail">
             <div class="prev" @click="prevImgPage"><i class="icon icon-zuo"></i></div>
             <div class="scroll-box">
               <ul class="clear" :style="{'left':slideLeft+'px','width':398*imgPage+'px'}">
-                <li v-for="(item,index) in goodsDate.imageList" :class="index==currentImageNum?'on':''" @mouseenter="currentImageNum=index"><img :src="item"></li>
+                <li v-for="(item,index) in goodsDate.imageList" :class="index==currentImageNum?'on':''" @mouseenter="mouseImg(index)"><img :src="item"></li>
               </ul>
             </div>
             <div class="next" @click="nextImgPage"><i class="icon icon-you"></i></div>
@@ -27,22 +27,22 @@
         </div>
         <div class="info-body">
           <div class="price clear">
-            <label>价格</label><p>￥{{goodsDate.price}}</p>
+            <label>促销价格</label><p>￥{{goodsPrice}}</p>
           </div>
           <hr>
           <ul>
             <li class="clear"><label>商品产地</label><p>{{goodsDate.origin}}</p></li>
-            <!--<li class="clear"><label>保质期至</label><p>2019-04-12</p></li>-->
-            <!--<li class="clear"><label>商品等级</label><p>特级初榨</p></li>-->
-            <!--<li class="clear"><label>包装描述</label><p>玻璃瓶装</p></li>-->
+            <!--<li class="clear"><label>保质期至</label><p>2019-04-12</p></li>
+            <li class="clear"><label>商品等级</label><p>特级初榨</p></li>
+            <li class="clear"><label>包装描述</label><p>玻璃瓶装</p></li>-->
           </ul>
         </div>
         <div class="sku-panel">
-          <div class="sku-params clear" v-for="item,index in goodsSpecList">
+          <div class="sku-params clear" v-for="(item,index) in goodsSpecList">
             <label class="params-name">{{item.title}}</label>
             <ul class="params-tab">
-              <li v-for="sku in item.list" >
-                <a class="router-link-active" :title="sku.title" @click="choiceSku(index,sku.id)">{{sku.title}}</a>
+              <li v-for="sku in item.list" :class="skuChoice[index]==sku.id?'on':''">
+                <span :title="sku.title" @click="choiceSku(index,sku.id)">{{sku.title}}</span>
               </li>
             </ul>
           </div>
@@ -55,12 +55,13 @@
                 <span class="more" :class="{'up-disabled':buyData.count>=limit_count}" @click="addCount"><i class="icon icon-jia"></i></span>
               </div>
             </div>
+            <div class="limit_count">库存：{{limit_count}}</div>
           </div>
         </div>
         <div class="operation-wrapper clear">
           <div class="btn buy fl"><a>立即购买</a></div>
-          <div class="btn cat fl"><a><i class="icon icon-gouwuche"></i>加入购物车</a></div>
-          <div class="btn follow fl"><a><i class="icon icon-shoucang"></i><br>收藏</a></div>
+          <div class="btn cat fl" @click="addCarHandle"><a><i class="icon icon-gouwuche"></i>加入购物车</a></div>
+          <div class="btn follow fl" :class="follow==1?'active':''" @click="followGoods(follow)"><a><i class="icon icon-shoucang"></i><br>收藏</a></div>
         </div>
       </div>
     </div>
@@ -84,16 +85,20 @@
 export default {
   data(){
     return {
-      limit_count:1,
+      limit_count:1,          /*限制库存*/
+      goodsPrice:0,          /*商品价格*/
       goodsDate:{
         labels:'',
         description:'',
         imageList:[]
       },
       follow:0,
-      goodsSpecList:null,
-      goodsSpecUnitList:null,
+      goodsSpecList:null,       /*sku列表*/
+      goodsSpecUnitList:null,   /*sku的总数据*/
+
+
       currentImageNum:0,     /*当前显示图片的序号*/
+      goodsShowImg:'',       /*显示的主图*/
       imgPage:1,             /*轮播的页数*/
       curImgPage:1,          /*当前轮播的页数*/
       slideLeft:5,           /*位置*/
@@ -101,12 +106,13 @@ export default {
       detailTab:['商品详情','使用指南','物流与售后'],    //详情导航
       curDetailTab:0,   //当前导航
 
-      /*选择的sku*/
-      choice:[],
-      /*购买的sku*/
+
+      skuLevel:0,      /*sku的等级*/
+      skuChoice:[],    /*选择的sku数组*/
+      /*选中的sku*/
       buysku:{
         "id": '',
-        "title": "",
+        "title": '',
         "specIdList": [],
         "stocks": '',
         "price": '',
@@ -114,12 +120,13 @@ export default {
         "fare": '',
         "salesVolume": '',
         "primary": '',
-        "imageUrl": ""
+        "imageUrl": ''
       },
       /*购买或加入购物车数据*/
       buyData:{
-        skuId:'',
-        count:1,
+        id: '',
+        unitId: '',
+        count: 1,
       }
     }
   },
@@ -136,20 +143,32 @@ export default {
       this.goodsSpecList=response.data.goodsSpecList;
       this.goodsSpecUnitList=response.data.goodsSpecUnitList;
       this.imgPage=Math.ceil(this.goodsDate.imageList.length/4);
-      this.limit_count=this.goodsDate.stocks
+      this.limit_count=this.goodsDate.stocks;
+      this.goodsPrice=this.goodsDate.promotionPrice;
+      this.goodsShowImg=this.goodsDate.imageList[this.currentImageNum];
+      if(this.goodsSpecList!=null){
+        this.skuLevel=this.goodsSpecList.length;
+      }
     }, response => {
       this.$layer.msg("获取商品失败");
       console.log(response.data);
     });
   },
   methods:{
+    /*显示主图*/
+    mouseImg(idx){
+      this.currentImageNum=idx;
+      this.goodsShowImg=this.goodsDate.imageList[idx];
+    },
+    /*加*/
     addCount () {
       this.buyData.count++
-      if(this.buyData.count>this.goodsDate.stocks){
-        this.buyData.count = this.goodsDate.stocks
+      if(this.buyData.count>this.limit_count){
+        this.buyData.count = this.limit_count
         this.$layer.msg('超过库存');
       }
     },
+    /*减*/
     subCount () {
       this.buyData.count--
       if(this.buyData.count<1){
@@ -172,19 +191,92 @@ export default {
         this.curImgPage++
       }
     },
+    /*查询unit*/
+    searchUnitData(){
+      /*判断是否选择完整*/
+      for(let i=0;i<this.skuLevel;i++){
+        if(this.skuChoice[i]==undefined){
+          return false
+        }
+      }
+      /*查询数据*/
+      for(let j in this.goodsSpecUnitList){
+        let indexon_1;
+        for(let n in this.goodsSpecUnitList[j].specIdList){
+          indexon_1=1;
+          if(this.goodsSpecUnitList[j].specIdList[n]!=this.skuChoice[n]){
+            indexon_1=0;
+            break;
+          }
+        }
+        /*存在数据*/
+        if(indexon_1==1){
+          this.buysku=this.goodsSpecUnitList[j];
+          this.goodsShowImg=this.buysku.imageUrl;
+          this.limit_count=this.buysku.stocks;
+          this.goodsPrice=this.buysku.promotionPrice;
+          this.buyData.unitId=this.buysku.id;
+          if(this.buyData.count>this.limit_count){
+            this.buyData.count=this.limit_count;
+          }
+        }
+      }
+    },
+    /*选择sku*/
     choiceSku(index,id){
-
+      this.$set(this.skuChoice, index, id);   /*数组操作$set*/
+      this.searchUnitData();
+    },
+    /*收藏*/
+    followGoods(followStatus){
+      if(followStatus==0){
+        this.axios.post("/api/goods/follow",{"id":this.goodsId}).then(response => {
+          this.follow=1;
+          this.$layer.msg('已收藏');
+        }, error => {
+          if(error.response.status=='401'){
+            this.$layer.msg('您还未登录');
+            this.$store.commit('showLog');
+          }
+        });
+      }else{
+        this.axios.put("/api/goods/follow/cancel",{"id":this.goodsId}).then(response => {
+          this.follow=0;
+          this.$layer.msg('已取消收藏');
+        }, error => {
+          if(error.response.status=='401'){
+            this.$layer.msg('您还未登录');
+            this.$store.commit('showLog');
+          }
+        });
+      }
+    },
+    /*加入购物车*/
+    addCarHandle(){
+      /*判断是否选择sku*/
+      if(this.skuLevel!=0){
+        for(let i=0;i<this.skuLevel;i++){
+          if(this.skuChoice[i]==undefined){
+            this.$layer.msg('请选择规格');
+            return false
+          }
+        }
+      }
+      this.buyData.id=this.goodsId;
+      this.$store.commit('addCartData',this.buyData);
     }
   },
   watch:{
     buyData:{
       handler:function (val,oldval) {
-        if(this.buyData.count>this.goodsDate.stocks){
-          this.buyData.count=this.goodsDate.stocks
+        if(this.buyData.count>this.limit_count){
+          this.buyData.count=this.limit_count
+        }else if(this.buyData.count<1){
+          this.buyData.count=''
         }
       },
       deep:true
-    }
+    },
   },
 
 }
@@ -412,7 +504,7 @@ export default {
     margin-bottom: 15px;
     vertical-align: middle;
   }
-  .goodsDetail .goods-info .sku-panel .sku-params .params-tab li a{
+  .goodsDetail .goods-info .sku-panel .sku-params .params-tab li span{
     border: 1px solid #ddd;
     float: left;
     cursor: pointer;
@@ -423,7 +515,7 @@ export default {
     color: #333;
     overflow: hidden;
   }
-  .goodsDetail .goods-info .sku-panel .sku-params .params-tab li.on a{
+  .goodsDetail .goods-info .sku-panel .sku-params .params-tab li.on span{
     border: 2px solid #b4a078;
     color: #333;
     margin: -1px;
@@ -472,6 +564,14 @@ export default {
     font-weight: 400;
     color: #b4a078;
     line-height: 30px;
+  }
+
+  .goodsDetail .goods-info .sku-panel .sku-params .limit_count{
+    float: left;
+    line-height: 32px;
+    margin-left: 16px;
+    font-size: 13px;
+    color: #666;
   }
 
   .goodsDetail .operation-wrapper{

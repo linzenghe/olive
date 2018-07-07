@@ -14,9 +14,9 @@ import CustomerOrder from '@/views/customer/order'
 import NoFound  from '@/views/404'
 import ServerError from '@/views/500'
 import Login from '@/views/login'
-import goodsList from '@/views/goodsList'
-import goodsDetail from '@/views/goodsDetail'
-
+import GoodsList from '@/views/goodsList'
+import GoodsDetail from '@/views/goodsDetail'
+import Cart from '@/views/cart'
 
 
 
@@ -26,7 +26,6 @@ import PageThree from '../views/page_three'
 import PageFour from '../views/page_Four'
 import PageFive from '../views/page_Five'
 import Item from '../views/item'
-import Cart from '../views/cart'
 
 
 const router = new Router({
@@ -46,8 +45,9 @@ const router = new Router({
     {path:'/login',component:Login},
     {path:'/404',component:NoFound},
     {path:'/500',component:ServerError},
-    {path:'/search',name:'search',component:goodsList},
-    {path:'/goods',name:'goods',component:goodsDetail},
+    {path:'/search',name:'search',component:GoodsList},
+    {path:'/goods',name:'goods',component:GoodsDetail},
+    {path:'/cart',component:Cart},
 
 
 

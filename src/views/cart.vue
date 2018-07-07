@@ -1,576 +1,273 @@
 <template>
-  <div id="main" class="hander-car">
-    <div class="store-content">
-      <div class="cart-box">
-        <div class="title">
-          <h2>购物清单</h2>
-        </div>
-        <div class="cart-inner">
-          <div class="empty-label" v-if="count==0">
-            <h3>您的购物车中还没有商品</h3>
-            <router-link to="/">现在选购</router-link>
-          </div>
-          <div v-else>
-            <div class="cart-table-title">
-              <span class="name">商品信息</span>
-              <span class="operation">操作</span>
-              <span class="subtotal">小计</span>
-              <span class="num">数量</span>
-              <span class="price">单价</span>
-            </div>
-            <div class="cart-table">
-              <div class="cart-group">
-                <!--购物列表-->
-                <div class="cart-top-items">
-                  <div class="cart-items" v-for="(item,index) in carPanelData">
-                    <div class="items-choose">
-                      <span class="blue-checkbox-new checkbox-on"><a></a></span>
-                    </div>
-                    <div class="items-thumb">
-                      <img :src="item.info.ali_image+'?x-oss-process=image/resize,w_206/quality,Q_80/format,webp'">
-                      <a href="javascript:;" target="_blank"></a>
-                    </div>
-                    <div class="name hide-row" >
-                      <div class="name-table">
-                        <a href="javascript:;" target="_blank">{{item.info.title}}</a>
-                        <ul class="attribute">
-                          <li>{{item.info.spec_json.show_name}}</li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="operation">
-                      <a class="items-delete-btn" @click="delCarpanelData(item.info.id)"></a>
-                    </div>
-                    <div class="subtotal">¥ {{item.info.price}}</div>
-                    <div class="item-cols-num">
-                      <div class="select js-select-quantity">
-                        <span class="down down-disabled">-</span>
-                        <span class="num">
-														<input type="text" style="display: inline-block;" :value="item.count">
-														<ul>
-															<li>1</li>
-															<li>2</li>
-														</ul>
-													</span>
-                        <span class="up">+</span>
-                      </div>
-                    </div>
-                    <div class="price">¥ {{item.info.price}}</div>
+  <div id="cart" class="cart">
+    <div class="container">
+      <div class="back-opt"><a @click="back"><i class="icon icon-zuo"></i>返回上一页</a></div>
+      <div class="cart-panel clear">
+        <div class="cart-left">
+          <div class="cart-items">
+            <div class="cart-item clear">
+              <div class="cart-goods-img fl">
+                <img src="">
+              </div>
+              <div class="cart-goods-info fl">
+                <h4>推荐商品主标题一行完全展现20个中文字符长度</h4>
+                <div class="price">价格：<span>￥222</span><del>￥333</del></div>
+                <div class="sku"><span>红色</span><span>500ml</span></div>
+              </div>
+              <div class="cart-opt fr">
+                <div class="field">
+                  <div class="u-selnum">
+                    <span class="less"><i class="icon icon-jian"></i></span>
+                    <input type="text" value="1">
+                    <span class="more"><i class="icon icon-jia"></i></span>
                   </div>
                 </div>
+                <div class="del-btn"><i class="icon icon-close"></i></div>
+              </div>
+            </div>
+            <div class="cart-item clear">
+              <div class="cart-goods-img fl">
+                <img src="">
+              </div>
+              <div class="cart-goods-info fl">
+                <h4>推荐商品主标题一行完全展现20个中文字符长度</h4>
+                <div class="price">价格：<span>￥222</span><del>￥333</del></div>
+                <div class="sku"><span>红色</span><span>500ml</span></div>
+              </div>
+              <div class="cart-opt fr">
+                <div class="field">
+                  <div class="u-selnum">
+                    <span class="less"><i class="icon icon-jian"></i></span>
+                    <input type="text" value="1">
+                    <span class="more"><i class="icon icon-jia"></i></span>
+                  </div>
+                </div>
+                <div class="del-btn"><i class="icon icon-close"></i></div>
+              </div>
+            </div>
+            <div class="cart-item clear">
+              <div class="cart-goods-img fl">
+                <img src="">
+              </div>
+              <div class="cart-goods-info fl">
+                <h4>推荐商品主标题一行完全展现20个中文字符长度</h4>
+                <div class="price">价格：<span>￥222</span><del>￥333</del></div>
+                <div class="sku"><span>红色</span><span>500ml</span></div>
+              </div>
+              <div class="cart-opt fr">
+                <div class="field">
+                  <div class="u-selnum">
+                    <span class="less"><i class="icon icon-jian"></i></span>
+                    <input type="text" value="1">
+                    <span class="more"><i class="icon icon-jia"></i></span>
+                  </div>
+                </div>
+                <div class="del-btn"><i class="icon icon-close"></i></div>
               </div>
             </div>
           </div>
         </div>
-        <div class="cart-bottom-bg fix-bottom" v-if="count>0">
-          <div class="cart-bar-operation">
-            <div>
-              <div class="choose-all js-choose-all">
-                <span class="blue-checkbox-new checkbox-on"><a></a></span>
-                全选
-              </div>
-              <div class="delete-choose-goods">删除选中的商品</div>
+        <div class="cart-right">
+          <div class="submit-panel">
+            <div class="submit-panel-h">购物车总金额</div>
+            <div class="submit-panel-b">
+              <ul>
+                <li class="clear"><label>商品件数</label><span class="fr">24 件</span></li>
+                <li class="clear"><label>商品金额</label><span class="fr">24 元</span></li>
+                <li class="clear"><label>折扣金额</label><span class="fr">10 元</span></li>
+                <li class="clear"><label>订单合计</label><span class="fr">14 元</span></li>
+              </ul>
             </div>
-          </div>
-          <div class="shipping">
-            <div class="shipping-box">
-              <div class="shipping-total shipping-num">
-                <h4 class="">
-                  已选择 <i>0</i> 件商品
-                </h4>
-                <h5>
-                  共计 <i >{{count}}</i> 件商品
-                </h5>
-              </div>
-              <div class="shipping-total shipping-price">
-                <h4 class="">
-                  应付总额：<span>￥</span><i >{{total}}</i>
-                </h4>
-                <h5 class="shipping-tips">
-                  应付总额不含运费
-                </h5>
-              </div>
+            <div class="submit-panel-f">
+              <a class="submit-btn">立即结算</a>
+              <p class="tip">运费在添加收获地址后自动计算，在确认收获后您可获得会员积分。</p>
             </div>
-            <!--disabled-btn-->
-            <span class="jianguo-blue-main-btn big-main-btn js-checkout " ><a>现在结算</a></span>
           </div>
         </div>
       </div>
     </div>
+    <service></service>
   </div>
 </template>
 
 <script>
-export default {
-  computed:{
-    carPanelData(){
-      return this.$store.state.carPanelData
-    },
-    count(){
-      return this.$store.getters.totalCount
-    },
-    total(){
-      return this.$store.getters.totalPrice
-    }
-  },
-  methods:{
-    delCarpanelData(id){
-      this.$store.commit('delCarpanelData',id)
-    },
-    //增加
+  import service from '@/components/service'
+  export default {
+    computed:{
 
-    //减少
+    },
+    components:{
+      service,
+    },
+    methods:{
+      back(){
+        this.$router.back(-1)
+      }
+    }
   }
-}
 </script>
 
 <style>
-  .cart-box{
-    position: relative;
-    margin-top: 40px;
-    overflow: hidden;
-    background: #fff;
-    border-radius: 8px;
-    border: 1px solid #dcdcdc;
-    border-color: rgba(0,0,0,.14);
-    box-shadow: 0 3px 8px -6px rgba(0,0,0,.1);
-  }
-  .cart-box .title{
-    position: relative;
-    z-index: 10;
-    height: 60px;
-    padding: 0 10px 0 30px;
-    border-bottom: 1px solid #d4d4d4;
-    border-radius: 8px 8px 0 0;
-    box-shadow: rgba(0,0,0,.06) 0 1px 7px;
-    background: #f3f3f3;
-    background: linear-gradient(#fbfbfb,#ececec);
-    line-height: 60px;
-    font-size: 18px;
-    color: #333;
-  }
-  .cart-box .cart-inner{
-    padding-bottom: 91px;
-  }
-  .cart-box .empty-label{
-    height: 49px;
-    padding: 385px 0 0 0;
-    background: url(../assets/img/cart-box-empty.png) no-repeat center 50px;
-    text-align: center;
-  }
-  .cart-box .empty-label h3{
+  .back-opt{
     font-size: 14px;
-    line-height: 1.5;
-    color: #8d8d8d;
-    margin-bottom: 17px;
+    margin: 20px 0 24px;
   }
-  .cart-box .empty-label>a.link{
-    width: 151px;
-    line-height: 38px;
-    height: 38px;
-    border: 1px solid #e5e5e5;
-    border-radius: 4px;
-    display: inline-block;
-    color: #999;
-    font-size: 12px;
-    background: #f9f9f9;
-    background: -webkit-linear-gradient(#fff,#f0f0f0);
-    background: linear-gradient(#fff,#f0f0f0);
-  }
-  .cart-box .cart-table-title{
-    position: relative;
-    z-index: 1;
-    line-height: 38px;
-    height: 38px;
-    padding: 0 0 0 30px;
-    font-size: 12px;
-    background: #eee;
-    border-bottom: 1px solid #dbdbdb;
-    border-bottom-color: rgba(0,0,0,.08);
-  }
-  .cart-box .cart-table-title span {
-    float: right;
-    text-align: center;
-  }
-  .cart-box .cart-table-title .name{
-    float: left;
-    text-align: left;
-  }
-  .cart-box .cart-table-title .operation,
-  .cart-box .cart-table-title .num,
-  .cart-box .cart-table-title .price,
-  .cart-box .cart-table-title .subtotal{
-    width: 137px;
-  }
-  .cart-box .cart-table-title .subtotal{
-    text-align: right;
-  }
-  .cart-box .cart-group{
-    position: relative;
-  }
-  .cart-box .cart-group .cart-items{
-    border-top: 1px dashed #eee;
-    position: relative;
-    height: 140px;
-    margin-left: 74px;
-  }
-  .cart-box .cart-group .cart-top-items:first-child .cart-items{
-    border-top: none;
-  }
-  .cart-box .cart-items .items-choose, .cart-items .items-thumb, .cart-items .name{
-    float: left;
-  }
-  .cart-box .cart-items .items-choose{
-    position: absolute;
-    left: -74px;
-    top: 0;
-    width: 74px;
-    height: 20px;
-    padding: 60px 0 0 31px;
-    font-size: 12px;
-    color: #999;
-  }
-  .cart-box .blue-checkbox-new{
-    display: inline-block;
-    position: relative;
-    width: 20px;
-    height: 20px;
-    background: url(../assets/img/checkbox-new.png) no-repeat 0 -20px;
-    cursor: pointer;
-    vertical-align: middle;
-  }
-  .cart-box .checkbox-on{
-    background: url(../assets/img/checkbox-new.png) no-repeat 0 0;
-  }
-  .cart-box .cart-items .items-thumb{
-    position: relative;
-    margin-top: 30px;
-    overflow: hidden;
-  }
-  .cart-box .cart-items .items-thumb, .cart-items .items-thumb img{
-    width: 80px;
-    height: 80px;
-  }
-  .cart-box .cart-items .items-thumb>a, .cart-items .items-thumb>i{
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    border-radius: 3px;
-    border: 0 solid rgba(255,255,255,.1);
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-  }
-  .cart-box .cart-items .name{
-    width: 380px;
-    margin-left: 20px;
-    color: #323232;
-    display: table;
-  }
-  .hide-row{
-    overflow: hidden;
-    word-break: keep-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .cart-items .name-table{
-    display: table-cell;
-    vertical-align: middle;
-    height: 140px;
-  }
-  .cart-items .name a{
-    color: #333;
-    font-size: 16px;
-  }
-  .cart-items .name .attribute, .cart-items .name p{
-    color: #999;
-    font-size: 12px;
-    padding-top: 4px;
-    line-height: 17px;
-  }
-  .hander-car .cart-items .name .attribute li{
-    float: left;
-    padding: 0 10px;
-    position: relative;
-  }
-  .hander-car .cart-items .name .attribute li:first-child{
-    padding-left: 0;
-  }
-  .hander-car .cart-items .item-cols-num,
-  .hander-car .cart-items .operation,
-  .hander-car .cart-items .price,
-  .hander-car .cart-items .subtotal{
-    overflow: hidden;
-    float: right;
-    width: 137px;
-    text-align: center;
-    color: #666;
-    line-height: 140px;
-  }
-  .hander-car .cart-items .operation{
-    padding: 58px 0 0;
-    font-size: 12px;
-    line-height: 24px;
-  }
-  .hander-car .cart-items .operation .items-delete-btn{
-    display: block;
-    width: 24px;
-    height: 24px;
-    margin: 0 auto;
-    color: #C2C2C2;
-    background: url(../assets/img/delete-btn-icon.jpg);
-    background-size: 100% auto;
-    transition: none;
-  }
-  .cart-items .operation .items-delete-btn:hover{
-    background-position: 0 -36px;
-  }
-  .hander-car .cart-items .subtotal{
-    font-weight: 700;
-    text-align: right;
-  }
-  .cart-items .item-cols-num{
-    padding-top: 50px;
-    line-height: 40px;
-  }
-  .cart-items .select{
-    width: 112px;
-    height: 40px;
-    padding-top: 4px;
-    margin: 0 auto;
-    line-height: 40px;
-  }
-  .select .down, .select .up{
-    overflow: hidden;
-    float: left;
-    display: inline-block;
-    width: 34px;
-    height: 37px;
-    margin-right: 5px;
-    background: url(../assets/img/cart-updown.jpg) no-repeat;
-    background-image: url(../assets/img/cart-updown.jpg);
-    background-size: 100% auto;
-    line-height: 40px;
-    text-indent: -9999em;
-    cursor: pointer;
-    user-select: none;
-  }
-  .select .down{
-    background-position: 0 -60px;
-  }
-  .select .down:hover{
-    background-position: 0 -180px;
-  }
-  .select .down.down-disabled, .select .down.down-disabled:hover{
-    background-position: 0 -300px;
-    cursor: not-allowed;
-  }
-  .select .num{
-    position: relative;
-    overflow: hidden;
-    float: left;
-    display: inline-block;
-    width: 36px;
-    height: 18px;
-    margin: 7px 0 0;
-    border: none;
-    border-radius: 3px;
-    line-height: 18px;
-    text-align: center;
+  .back-opt .icon{
     font-size: 14px;
+    margin-right: 4px;
   }
-  .select input{
-    width: 36px;
-    height: 18px;
-    background-color: transparent;
-    border: none;
-    border-radius: 3px;
-    text-align: center;
-    line-height: 18px;
-    font-size: 14px;
-    padding: 0;
+  .cart-panel{
+    margin-bottom: 100px;
   }
-  .select ul{
-    display: none;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 36px;
-  }
-  .select ul li{
-    width: 36px;
-    height: 18px;
-  }
-  .select .up{
-    float: right;
-    margin: 0;
-    background-position: 0 0;
-  }
-  .select .up:hover{
-    background-position: 0 -120px;
-  }
-  .select .up.up-disabled, .select .up.up-disabled:hover{
-    background-position: 0 -240px;
-    cursor: not-allowed;
-  }
-  .gray-box .cart-bottom-bg{
-
-    border-radius: 0 0 8px 8px;
-  }
-  .fix-bottom{
-    height: 90px;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    z-index: 1;
-    background-position: center;
-    background: #fdfdfd;
-    background: linear-gradient(#fdfdfd,#f9f9f9);
-    border-top: 1px solid #e9e9e9;
-    box-shadow: 0 -3px 8px rgba(0,0,0,.04);
-  }
-  .cart-bar-operation{
+  .cart-panel .cart-left{
     float: left;
-    padding: 35px 26px;
-    font-size: 12px;
+    width: 750px;
   }
-  .choose-all, .delete-choose-goods, .selected-count{
-    float: left;
-    height: 20px;
-    line-height: 20px;
-    cursor: pointer;
-    position: relative;
+  .cart-panel .cart-items .cart-item{
+    border: 1px solid #979797;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24);
+    box-sizing: border-box;
+    padding: 24px 24px;
+    margin-bottom: 16px;
   }
-  .delete-choose-goods{
-    position: relative;
-    margin-left: 21px;
-    color: #bbb;
+  .cart-panel .cart-items .cart-item *{
+    box-sizing: border-box;
   }
-  .delete-choose-goods-disabled{
-    cursor: not-allowed;
+  .cart-panel .cart-items .cart-item .cart-goods-img{
+    width: 120px;
+    height: 120px;
+    background: #D8D8D8;
+    border: 1px solid #979797;
   }
-  .shipping{
-    display: inline-block;
-    float: right;
+  .cart-panel .cart-items .cart-item .cart-goods-info{
     padding: 20px 30px;
   }
-  .shipping-box{
-    display: inline-block;
-    padding-top: 1px;
-    margin-right: 10px;
-  }
-  .shipping-total{
-    display: inline-block;
-    border-left: 1px solid #e1e1e1;
-    padding: 0 20px;
-  }
-  .shipping-total:first-child{
-    border: none;
-  }
-  .shipping-total.shipping-num{
-    text-align: right;
-  }
-  .shipping-total h4{
-    color: #323232;
-  }
-  .shipping-total h4 i{
-    font-size: 18px;
-    font-weight: 700;
-  }
-  .shipping-total.shipping-num i{
-    width: 28px;
-    display: inline-block;
-    text-align: center;
-  }
-  .shipping-total h4.highlight i, .shipping-total h4.highlight span{
-    color: #d44d44;
-  }
-  .shipping-total h5{
-    color: #959595;
-  }
-  .shipping-total h5 i{
-    width: 28px;
-    display: inline-block;
-    text-align: center;
-  }
-  .shipping-total{
-    display: inline-block;
-    border-left: 1px solid #e1e1e1;
-    padding: 0 20px;
-  }
-  .shipping-total.shipping-price{
-    width: 155px;
-    padding-right: 0;
-  }
-  .blue-main-btn, .gray-main-btn, .jianguo-blue-main-btn{
-    display: block;
-    padding: 1px;
-    margin: 0 auto;
-    border-radius: 9px;
-    background: #015e94;
-    background: linear-gradient(#5598c9,#2a6da2);
-    text-align: center;
-    text-shadow: rgba(255,255,255,.496094) 0 1px 0;
-    cursor: pointer;
-    user-select: none;
-  }
-  .jianguo-blue-main-btn{
-    background: #567CE6;
-    background: linear-gradient(#799CEA,#567CE6);
-    box-shadow: 0 1px 3px rgba(0,0,0,.1), inset 0 -1px 2px rgba(0,0,0,.2);
-  }
-  .cart-box .big-main-btn{
-    height: 48px;
-  }
-  .cart-box .big-main-btn{
-    float: right;
-    background: #5d86e5;
-    background: -webkit-linear-gradient(#688fe8,#5079e1);
-    background: linear-gradient(#688fe8,#5079e1);
-  }
-  .cart-box .big-main-btn.jianguo-blue-main-btn.disabled-btn{
-    background: #A9A9A9;
-    background: linear-gradient(#BFBFBF,#999);
-    box-shadow: none;
-  }
-  .cart-box .blue-main-btn a, .gray-main-btn a, .jianguo-blue-main-btn a{
-    display: block;
-    padding: 2px 0;
-    border-radius: 9px;
-    background: #5f7ed7;
-    background: linear-gradient(#739fe1,#5f7ed7);
-    box-shadow: inset 0 1px 3px #92b6ec, inset 0 0 2px #627dca, inset 0 -2px 3px #4c69b8;
-    text-shadow: #4f70b3 0 -1px 0;
-    cursor: pointer;
-    color: #fff;
-    transition: all .3s ease;
-  }
-  .cart-box .jianguo-blue-main-btn a{
-    background: #6C94F3;
-    background: linear-gradient(#7EA3F5,#5A82F0);
-    box-shadow: none;
-    text-shadow: none;
-    color: #FFF;
-    transition: all .3s ease;
-  }
-  .cart-box .big-main-btn a{
-    height: 44px;
-    line-height: 45px;
-    font-size: 18px;
-  }
-  .cart-box .big-main-btn a{
-    padding: 2px 32px;
+  .cart-panel .cart-items .cart-item .cart-goods-info h4{
     font-size: 16px;
+    color: #222222;
+    line-height: 16px;
   }
-  .jianguo-blue-main-btn.disabled-btn a,
-  .jianguo-blue-main-btn.disabled-btn:active a,
-  .jianguo-blue-main-btn.disabled-btn:hover a{
-    background: #B7B7B7;
-    background: linear-gradient(#C3C3C3,#ABAAAA);
-    box-shadow: inset 0 1px 3px #CCC;
+  .cart-panel .cart-items .cart-item .cart-goods-info .price{
+    margin-top: 20px;
+    font-size: 14px;
+    color: #222;
+    line-height: 14px;
   }
-  .disabled-btn, .disabled-btn a{
-    opacity: .7;
-    cursor: not-allowed;
+  .cart-panel .cart-items .cart-item .cart-goods-info .price span{
+    color: #d7282d;
+  }
+  .cart-panel .cart-items .cart-item .cart-goods-info .price del{
+    font-size: 12px;
+    color: #999;
+    margin-left: 8px;
+  }
+  .cart-panel .cart-items .cart-item .cart-goods-info .sku{
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 14px;
+    color: #222;
+  }
+  .cart-panel .cart-items .cart-item .cart-goods-info .sku span{
+    margin-right: 16px;
+  }
+  .cart-panel .cart-items .cart-item .cart-opt{
+    padding: 42px 0;
+  }
+  .cart-panel .cart-items .cart-item .cart-opt .del-btn{
+    float: right;
+    margin-left: 16px;
+    margin-top: 6px;
+  }
+  .cart-panel .cart-items .cart-item .cart-opt .del-btn .icon{
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .field{
+    margin-bottom: 3px;
+    float: left;
+  }
+  .field .u-selnum{
+    border: 1px solid #ddd;
+    overflow: hidden;
+  }
+  .field .u-selnum .less,.field .u-selnum .more, .field .u-selnum input {
+    position: relative;
+    float: left;
+    width: 36px;
+    height: 30px;
+    line-height: 28px;
+    background: #fff;
+  }
+  .field .u-selnum .less.down-disabled,.field .u-selnum .more.up-disabled{
+    cursor: no-drop;
+  }
+  .field .u-selnum .less{
+    border-right: 1px solid #ddd;
+    cursor: pointer;
+    text-align: center;
+  }
+  .field .u-selnum input{
+    box-sizing: border-box;
+    border-radius: 0;
+    border: 0;
+    width: 60px;
+    margin: 0;
+    font-size: 12px;
+    text-align: center;
+    color: #333;
+  }
+  .field .u-selnum .more{
+    border-left: 1px solid #ddd;
+    cursor: pointer;
+    text-align: center;
+  }
+  .field .u-selnum .less .icon,.field .u-selnum .more .icon{
+    font-size: 20px;
+    font-weight: 400;
+    color: #b4a078;
+    line-height: 30px;
+  }
+  .cart-panel .cart-right{
+    float: right;
+    width: 400px;
+  }
+  .cart-panel .cart-right .submit-panel{
+    background: #F5F5F5;
+    border: 1px solid rgba(0,0,0,0.30);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.24);
+  }
+  .cart-panel .cart-right .submit-panel .submit-panel-h{
+    font-size: 14px;
+    color: #999999;
+    border-bottom: 1px solid rgba(0,0,0,0.30);
+    padding: 16px 24px;
+  }
+  .cart-panel .cart-right .submit-panel .submit-panel-b{
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(0,0,0,0.30);
+  }
+  .cart-panel .cart-right .submit-panel .submit-panel-b li{
+    margin-bottom: 8px;
+    color: #222;
+  }
+  .cart-panel .cart-right .submit-panel .submit-panel-b li:last-child{
+    margin-bottom: 0;
+  }
+  .cart-panel .cart-right .submit-panel .submit-panel-f{
+    padding: 16px 24px;
+  }
+  .cart-panel .cart-right .submit-panel .submit-panel-f .submit-btn{
+    background: #000000;
+    display: block;
+    line-height: 46px;
+    text-align: center;
+    font-size: 14px;
+    color: #FFFFFF;
+  }
+  .cart-panel .cart-right .submit-panel .submit-panel-f .tip{
+    font-size: 13px;
+    color: #222222;
+    line-height: 18px;
+    margin-top: 8px;
   }
 </style>
