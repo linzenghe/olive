@@ -11,12 +11,15 @@ import Center from '@/views/center'
 import CustomerInfo from '@/views/customer/userinfo'
 import CustomerAddress from '@/views/customer/address'
 import CustomerOrder from '@/views/customer/order'
+import CustomerFollow from '@/views/customer/follow'
+import CustomerSetting from '@/views/customer/setting'
 import NoFound  from '@/views/404'
 import ServerError from '@/views/500'
 import Login from '@/views/login'
 import GoodsList from '@/views/goodsList'
 import GoodsDetail from '@/views/goodsDetail'
 import Cart from '@/views/cart'
+import OrderConfirm from '@/views/orderConfirm'
 
 
 
@@ -39,7 +42,9 @@ const router = new Router({
       children: [
         {path: 'info', name: 'Info', meta:{requireAuth:true}, component: CustomerInfo},
         {path: 'address', name: 'Address', meta:{requireAuth:true}, component: CustomerAddress},
-        {path: 'order', name: 'Order', meta:{requireAuth:true}, component: CustomerOrder}
+        {path: 'order', name: 'Order', meta:{requireAuth:true}, component: CustomerOrder},
+        {path: 'follow', name: 'Follow', meta:{requireAuth:true}, component: CustomerFollow},
+        {path: 'setting', name: 'Setting', meta:{requireAuth:true}, component: CustomerSetting},
       ],
     },
     {path:'/login',component:Login},
@@ -48,6 +53,7 @@ const router = new Router({
     {path:'/search',name:'search',component:GoodsList},
     {path:'/goods',name:'goods',component:GoodsDetail},
     {path:'/cart',component:Cart},
+    {path:'/order/confirm',component:OrderConfirm},
 
 
 

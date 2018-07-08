@@ -5,11 +5,11 @@
         <div class="leftNav">
           <h3 class="title">账户中心</h3>
           <ul class="account-nav">
-            <li class="current"><a>账户信息</a></li>
-            <li><a>地址簿</a></li>
-            <li><a>所有订单</a></li>
-            <li><a>收藏夹</a></li>
-            <li><a>安全设置</a></li>
+            <router-link tag="li" :class="leftNavCur=='Info'?'current':''" to="/customer/info"><a>账户信息</a></router-link>
+            <router-link tag="li" :class="leftNavCur=='Address'?'current':''" to="/customer/address"><a>地址簿</a></router-link>
+            <router-link tag="li" :class="leftNavCur=='Order'?'current':''" to="/customer/order"><a>所有订单</a></router-link>
+            <router-link tag="li" :class="leftNavCur=='Follow'?'current':''" to="/customer/follow"><a>收藏夹</a></router-link>
+            <router-link tag="li" :class="leftNavCur=='Setting'?'current':''" to="/customer/setting"><a>安全设置</a></router-link>
           </ul>
         </div>
         <router-view></router-view>
@@ -20,10 +20,14 @@
 
 <script>
 export default {
-
+  computed:{
+    leftNavCur(){
+      let leftNavCur=this.$route.name;
+      return leftNavCur
+    }
+  },
 }
 </script>
-
 <style>
   .customer-panel{
     position: relative;

@@ -3,17 +3,16 @@
     <div class="customer-info">
       <div class="info-wrap">
         <div class="imageBox">
-          <img src="">
+          <img :src="userInfo.portraitUrl">
         </div>
         <div class="info">
-          <h5 class="name">小花</h5>
-          <p class="int"><span>会员积分</span>109000</p>
+          <h5 class="name">{{userInfo.name}}</h5>
+          <p class="int"><span>会员积分</span>{{userInfo.consumption}}</p>
         </div>
       </div>
       <div class="setting-wrap">
         <ul class="tab clear">
-          <li>绑定手机号码</li>
-          <li>查询积分记录</li>
+          <li v-for="item,index in tab" :class="index==tabCur?'current':''">{{item}}</li>
         </ul>
         <div class="tab-content bindPhone" id="bindPhone">
           <form class="form" id="bindPhoneForm" role="form">
@@ -38,7 +37,29 @@
 
 <script>
 export default {
-
+  data(){
+    return{
+      userInfo:{
+        "name": "",
+        "phone": "",
+        "uuid": "",
+        "portraitUrl": null,
+        "createTime": null,
+        "consumption": 0,
+        "hasOpenId": null
+      },
+      tab:['绑定手机号码','查询积分记录'],
+      tabCur:0,   //当前导航
+    }
+  },
+  mounted(){
+    this.axios.get("/api/current").then(response => {
+      this.userInfo=response.data;
+      console.log(this.userInfo);
+    }, error => {
+      this.$layer.msg(error.response.data.message);
+    });
+  }
 }
 </script>
 
@@ -94,7 +115,6 @@ export default {
     padding-top: 30px;
   }
   .customer-info .setting-wrap .tab{
-    padding: 0 10px;
     border-bottom: 2px solid #979797;
   }
   .customer-info .setting-wrap .tab li{
@@ -105,6 +125,13 @@ export default {
     color: #000;
     line-height: 46px;
     padding: 0 28px;
+  }
+  .customer-info .setting-wrap .tab li:hover{
+    background: #f5f3ef;
+  }
+  .customer-info .setting-wrap .tab li.current{
+    background: #b4a078;
+    color: #fff;
   }
   .customer-info .setting-wrap .tab-content{
     padding-bottom: 140px;

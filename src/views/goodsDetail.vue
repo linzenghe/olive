@@ -51,7 +51,7 @@
             <div class="field">
               <div class="u-selnum">
                 <span class="less" :class="{'down-disabled':buyData.count<=1}" @click="subCount"><i class="icon icon-jian"></i></span>
-                <input type="text" v-model="buyData.count">
+                <input type="text" v-model="buyData.count" @blur="blurCount">
                 <span class="more" :class="{'up-disabled':buyData.count>=limit_count}" @click="addCount"><i class="icon icon-jia"></i></span>
               </div>
             </div>
@@ -172,6 +172,11 @@ export default {
     subCount () {
       this.buyData.count--
       if(this.buyData.count<1){
+        this.buyData.count = 1
+      }
+    },
+    blurCount(){
+      if(this.buyData.count==''){
         this.buyData.count = 1
       }
     },

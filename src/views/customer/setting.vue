@@ -1,14 +1,11 @@
 <template>
-  <div class="customer-content">
+<div class="customer-content">
     <div class="customer-address">
       <div class="title clear">
         <p class="tip fl">已保存收货地址(地址最多10条，还能保存2条)</p>
         <a class="add fr">+新建地址</a>
       </div>
-      <div class="address-empty" v-if="list.length==null">
-        暂无收货地址
-      </div>
-      <table class="addressList" v-else>
+      <table class="addressList">
         <thead>
           <tr>
             <th class="w1">收货人</th>
@@ -18,14 +15,24 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item,index) in list">
-            <td>{{item.contact}}</td>
-            <td>{{item.province+item.city+item.county+item.address}}</td>
-            <td>{{item.contactPhone}}</td>
+          <tr>
+            <td>收货淫</td>
+            <td>福建省厦门市湖里区华昌路135号客家大厦B501</td>
+            <td>157****4899</td>
             <td class="opt">
               <a class="edit">编辑</a>
-              <a class="del" @click="delAddress(item.id)">删除</a>
-              <a class="set" :class="item.primary==1?'cur':''" v-text="item.primary==1?'默认地址':'设为默认地址'" @click="setPrimary(item.id)"></a>
+              <a class="del">删除</a>
+              <a class="set">设为默认地址</a>
+            </td>
+          </tr>
+          <tr>
+            <td>收货淫</td>
+            <td>福建省厦门市湖里区华昌路135号客家大厦B501</td>
+            <td>157****4899</td>
+            <td class="opt">
+              <a class="edit">编辑</a>
+              <a class="del">删除</a>
+              <a class="set cur">默认地址</a>
             </td>
           </tr>
         </tbody>
@@ -33,48 +40,10 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
-  data(){
-    return{
-      list:[]
-    }
-  },
-  mounted(){
-    this.axios.get("/api/customer/address/list").then(response => {
-      this.list=response.data.list;
-    }, error => {
-      this.$layer.msg(error.response.data.message);
-    });
-  },
-  methods:{
-    /*设为默认地址*/
-    setPrimary(id){
-      this.axios.put("/api/customer/address/primary",{'id':id}).then(response => {
-        this.list.forEach((address,index)=>{
-          this.list[index].primary=0;
-          if(address.id==id){
-            this.$layer.msg('设置成功');
-            this.list[index].primary=1;
-          }
-        })
-      }, error => {
-        this.$layer.msg(error.response.data.message)
-      });
-    },
-    /*删除*/
-    delAddress(id){
-      this.axios.delete("/api/customer/address/delete/"+id).then(response => {
-        this.list.forEach((address,index)=>{
-          if(address.id==id){
-            this.list.splice(index,1)
-          }
-        })
-      }, error => {
-        this.$layer.msg(error.response.data.message)
-      });
-    },
-  }
+
 }
 </script>
 

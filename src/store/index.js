@@ -141,6 +141,18 @@ let store = new Vuex.Store({
         layer(Vue).msg('删除失败');
         console.log(response.data);
       });
+    },
+    /*编辑购物车*/
+    editCartCount(state,stark){
+      axios.put("/api/cart/edit",stark).then(response => {
+        state.cartData.cartItemListView.list.forEach((goods,index)=>{
+          if(goods.id==response.data.cartItem.id){
+            state.cartData.cartItemListView.list[index].count=response.data.cartItem.count
+          }
+        })
+      }, error => {
+        layer(Vue).msg(error.response.data.message);
+      });
     }
   }
 });

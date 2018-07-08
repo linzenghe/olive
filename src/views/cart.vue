@@ -2,67 +2,38 @@
   <div id="cart" class="cart">
     <div class="container">
       <div class="back-opt"><a @click="back"><i class="icon icon-zuo"></i>返回上一页</a></div>
-      <div class="cart-panel clear">
+      <div class="cart-empty" v-if="carGoodsData.cartItemListView==null||carGoodsData.cartItemListView.list.length==0">
+        <div class="e-emptyStatus">
+          <i class="icon icon-gouwuche"></i>
+          <p class="tip">购物车还是空滴</p>
+          <div class="opt">
+            <router-link class="opt-btn" to="/">继续逛</router-link>
+          </div>
+        </div>
+      </div>
+      <div class="cart-panel clear" v-else>
         <div class="cart-left">
           <div class="cart-items">
-            <div class="cart-item clear">
+            <div class="cart-item clear" v-for="(item,index) in carGoodsData.cartItemListView.list">
               <div class="cart-goods-img fl">
-                <img src="">
+                <img :src="item.bannerUrl">
               </div>
               <div class="cart-goods-info fl">
-                <h4>推荐商品主标题一行完全展现20个中文字符长度</h4>
-                <div class="price">价格：<span>￥222</span><del>￥333</del></div>
-                <div class="sku"><span>红色</span><span>500ml</span></div>
+                <h4>{{item.goodsName}}</h4>
+                <div class="sku">
+                  <span>{{item.goodsSubtitle}}</span>
+                </div>
+                <div class="price">价格：<span>￥{{item.promotionPrice}}</span><del>￥{{item.price}}</del></div>
               </div>
               <div class="cart-opt fr">
                 <div class="field">
                   <div class="u-selnum">
-                    <span class="less"><i class="icon icon-jian"></i></span>
-                    <input type="text" value="1">
-                    <span class="more"><i class="icon icon-jia"></i></span>
+                    <span class="less" @click="subCartCount(index,item.id)"><i class="icon icon-jian"></i></span>
+                    <input type="text" v-model="item.count" v-on:input="inputCartCount(index,item.id)">
+                    <span class="more" @click="addCartCount(index,item.id)"><i class="icon icon-jia"></i></span>
                   </div>
                 </div>
-                <div class="del-btn"><i class="icon icon-close"></i></div>
-              </div>
-            </div>
-            <div class="cart-item clear">
-              <div class="cart-goods-img fl">
-                <img src="">
-              </div>
-              <div class="cart-goods-info fl">
-                <h4>推荐商品主标题一行完全展现20个中文字符长度</h4>
-                <div class="price">价格：<span>￥222</span><del>￥333</del></div>
-                <div class="sku"><span>红色</span><span>500ml</span></div>
-              </div>
-              <div class="cart-opt fr">
-                <div class="field">
-                  <div class="u-selnum">
-                    <span class="less"><i class="icon icon-jian"></i></span>
-                    <input type="text" value="1">
-                    <span class="more"><i class="icon icon-jia"></i></span>
-                  </div>
-                </div>
-                <div class="del-btn"><i class="icon icon-close"></i></div>
-              </div>
-            </div>
-            <div class="cart-item clear">
-              <div class="cart-goods-img fl">
-                <img src="">
-              </div>
-              <div class="cart-goods-info fl">
-                <h4>推荐商品主标题一行完全展现20个中文字符长度</h4>
-                <div class="price">价格：<span>￥222</span><del>￥333</del></div>
-                <div class="sku"><span>红色</span><span>500ml</span></div>
-              </div>
-              <div class="cart-opt fr">
-                <div class="field">
-                  <div class="u-selnum">
-                    <span class="less"><i class="icon icon-jian"></i></span>
-                    <input type="text" value="1">
-                    <span class="more"><i class="icon icon-jia"></i></span>
-                  </div>
-                </div>
-                <div class="del-btn"><i class="icon icon-close"></i></div>
+                <div class="del-btn" @click="delCartItem(item.id)"><i class="icon icon-close"></i></div>
               </div>
             </div>
           </div>
@@ -72,14 +43,12 @@
             <div class="submit-panel-h">购物车总金额</div>
             <div class="submit-panel-b">
               <ul>
-                <li class="clear"><label>商品件数</label><span class="fr">24 件</span></li>
-                <li class="clear"><label>商品金额</label><span class="fr">24 元</span></li>
-                <li class="clear"><label>折扣金额</label><span class="fr">10 元</span></li>
-                <li class="clear"><label>订单合计</label><span class="fr">14 元</span></li>
+                <li class="clear"><label>商品件数</label><span class="fr">{{carGoodsData.cartView.count}} 件</span></li>
+                <li class="clear"><label>订单合计</label><span class="fr">{{carGoodsData.cartView.amount}} 元</span></li>
               </ul>
             </div>
             <div class="submit-panel-f">
-              <a class="submit-btn">立即结算</a>
+              <a class="submit-btn" @click="submitCart">立即结算</a>
               <p class="tip">运费在添加收获地址后自动计算，在确认收获后您可获得会员积分。</p>
             </div>
           </div>
@@ -94,16 +63,61 @@
   import service from '@/components/service'
   export default {
     computed:{
-
+      carGoodsData(){
+        return this.$store.state.cartData
+      }
     },
     components:{
       service,
     },
+    mounted(){
+      this.$store.commit('getCartData');
+    },
     methods:{
+      /*返回上一页*/
       back(){
         this.$router.back(-1)
+      },
+      /*删除购物车*/
+      delCartItem(id){
+        this.$store.commit('delCartData',id)
+      },
+      /*编辑购物车*/
+      subCartCount(index,id){
+        let count=this.carGoodsData.cartItemListView.list[index].count;
+        count--;
+        if(count<1){
+          return false;
+        }else{
+          this.$store.commit('editCartCount',{id:id,count:count});
+        }
+      },
+      addCartCount(index,id){
+        let count=this.carGoodsData.cartItemListView.list[index].count;
+        count++;
+        this.$store.commit('editCartCount',{id:id,count:count});
+      },
+      inputCartCount(index,id){
+        let count=this.carGoodsData.cartItemListView.list[index].count;
+        if(count<1){
+          count = '';
+        }
+        this.$store.commit('editCartCount',{id:id,count:count});
+      },
+      /*立即结算*/
+      submitCart(){
+        this.axios.get("/api/cart/checkout").then(response => {
+          this.$router.push('/order/confirm');
+        }, error => {
+          if(error.response.status=='401'){
+            this.$layer.msg('您还未登录');
+            this.$store.commit('showLog');
+          }else{
+            this.$layer.msg(error.response.message)
+          }
+        });
       }
-    }
+    },
   }
 </script>
 
@@ -138,6 +152,10 @@
     height: 120px;
     background: #D8D8D8;
     border: 1px solid #979797;
+  }
+  .cart-panel .cart-items .cart-item .cart-goods-img img{
+    width: 100%;
+    height: 100%;
   }
   .cart-panel .cart-items .cart-item .cart-goods-info{
     padding: 20px 30px;
@@ -269,5 +287,48 @@
     color: #222222;
     line-height: 18px;
     margin-top: 8px;
+  }
+  .cart-empty{
+    height: 500px;
+    background: #F5F5F5;
+    border: 1px solid rgba(0,0,0,0.30);
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.24);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.24);
+    margin-bottom: 50px;
+  }
+  .cart-empty .e-emptyStatus{
+    text-align: center;
+    margin: 150px auto 0;
+  }
+  .cart-empty .e-emptyStatus .icon{
+    font-size: 80px;
+  }
+  .cart-empty .e-emptyStatus p{
+    font-size: 16px;
+    margin-top: 16px;
+    color: #999;
+  }
+  .cart-empty .e-emptyStatus .opt{
+    margin-top: 16px;
+  }
+  .cart-empty .e-emptyStatus .opt .opt-btn{
+    display: inline-block;
+    height: 40px;
+    width: 100px;
+    font-size: 16px;
+    line-height: 38px;
+    color: #b4a078;
+    border: 1px solid #b4a078;
+    background-color: #f5f3ef;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding: 0;
+    letter-spacing: normal;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .cart-empty .e-emptyStatus .opt .opt-btn:hover{
+    background: #fff;
   }
 </style>
