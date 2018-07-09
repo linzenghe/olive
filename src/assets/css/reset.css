@@ -124,6 +124,14 @@ pre {
   font-size: 14px;
   color: #222;
 }
+.form .item .item-textarea{
+  border: 1px solid rgba(0,0,0,0.50);
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #222;
+}
 .form .submit-item{
   margin-top: 16px;
 }

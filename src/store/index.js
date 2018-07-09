@@ -110,8 +110,9 @@ let store = new Vuex.Store({
     getCartData(state){
       axios.get("/api/cart/current").then(response => {
         state.cartData=response.data;
-        state.cartInfo.count=state.cartData.cartView.count;
-        // console.log(state.cartData);
+        if(state.cartData.cartView!=null){
+          state.cartInfo.count=state.cartData.cartView.count;
+        }
       }, response => {
         layer(Vue).msg('获取购物车失败');
         console.log(response.data);

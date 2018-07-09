@@ -3,7 +3,7 @@
     <div class="customer-address">
       <div class="title clear">
         <p class="tip fl">已保存收货地址(地址最多10条，还能保存2条)</p>
-        <a class="add fr">+新建地址</a>
+        <a class="add fr" @click="addressNew">+新建地址</a>
       </div>
       <div class="address-empty" v-if="list.length==null">
         暂无收货地址
@@ -31,51 +31,68 @@
         </tbody>
       </table>
     </div>
+    <addressAddPanel v-bind:addShow="addShow" v-on:listenToCloseAddEvent="closeAddPop"></addressAddPanel>
+    <!--<addressEditPanel></addressEditPanel>-->
   </div>
 </template>
 <script>
-export default {
-  data(){
-    return{
-      list:[]
+  import addressAddPanel from '@/components/address-addpanel'
+  import addressEditPanel from '@/components/address-editpanel'
+  export default {
+    data(){
+      return{
+        list:[],
+        addShow:false,
+      }
+    },
+    components: {
+      addressAddPanel,
+      addressEditPanel
+    },
+    mounted(){
+      this.axios.get("/api/customer/address/list").then(response => {
+        this.list=response.data.list;
+      }, error => {
+        this.$layer.msg(error.response.data.message);
+      });
+    },
+    methods:{
+      /*设为默认地址*/
+      setPrimary(id){
+        this.axios.put("/api/customer/address/primary",{'id':id}).then(response => {
+          this.list.forEach((address,index)=>{
+            this.list[index].primary=0;
+            if(address.id==id){
+              this.$layer.msg('设置成功');
+              this.list[index].primary=1;
+            }
+          })
+        }, error => {
+          this.$layer.msg(error.response.data.message)
+        });
+      },
+      /*删除*/
+      delAddress(id){
+        this.axios.delete("/api/customer/address/delete/"+id).then(response => {
+          this.list.forEach((address,index)=>{
+            if(address.id==id){
+              this.list.splice(index,1)
+            }
+          })
+        }, error => {
+          this.$layer.msg(error.response.data.message)
+        });
+      },
+      /*新增地址*/
+      addressNew(){
+        this.addShow=true
+      },
+      /*关闭新增弹窗*/
+      closeAddPop(){
+        this.addShow=false
+      }
     }
-  },
-  mounted(){
-    this.axios.get("/api/customer/address/list").then(response => {
-      this.list=response.data.list;
-    }, error => {
-      this.$layer.msg(error.response.data.message);
-    });
-  },
-  methods:{
-    /*设为默认地址*/
-    setPrimary(id){
-      this.axios.put("/api/customer/address/primary",{'id':id}).then(response => {
-        this.list.forEach((address,index)=>{
-          this.list[index].primary=0;
-          if(address.id==id){
-            this.$layer.msg('设置成功');
-            this.list[index].primary=1;
-          }
-        })
-      }, error => {
-        this.$layer.msg(error.response.data.message)
-      });
-    },
-    /*删除*/
-    delAddress(id){
-      this.axios.delete("/api/customer/address/delete/"+id).then(response => {
-        this.list.forEach((address,index)=>{
-          if(address.id==id){
-            this.list.splice(index,1)
-          }
-        })
-      }, error => {
-        this.$layer.msg(error.response.data.message)
-      });
-    },
   }
-}
 </script>
 
 <style>

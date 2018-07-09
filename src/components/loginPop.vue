@@ -8,25 +8,24 @@
           <!--登录-->
           <div class="loginPop-c" v-if="logShow">
             <div class="title">会员登录</div>
-              <form class="form" id="loginForm" role="form" novalidate>
-                <div class="item">
-                  <input class="item-input" v-model="phone" type="text" placeholder="输入手机号码">
-                </div>
-                <div class="item">
-                  <button class="item-button" type="button"  @click="sendCode(phone)" :disabled="sendDisabled">获取验证码</button>
-                </div>
-                <div class="item">
-                  <input class="item-input" v-model="captcha" type="text" placeholder="输入短信验证码">
-                </div>
-                <div class="submit-item">
-                  <button class="item-button" type="button" @click="login" :disabled="loginDisabled">登录</button>
-                </div>
-                <div class="other_login clear">
-                  <p class="fl">社交账号快捷登录</p>
-                  <i class="icon icon-wechat fr"></i>
-                </div>
-              </form>
-
+            <form class="form" id="loginForm" role="form" novalidate>
+              <div class="item">
+                <input class="item-input" v-model="phone" type="text" placeholder="输入手机号码">
+              </div>
+              <div class="item">
+                <button class="item-button" type="button"  @click="sendCode(phone)" :disabled="sendDisabled">获取验证码</button>
+              </div>
+              <div class="item">
+                <input class="item-input" v-model="captcha" type="text" placeholder="输入短信验证码">
+              </div>
+              <div class="submit-item">
+                <button class="item-button" type="button" @click="login" :disabled="loginDisabled">登录</button>
+              </div>
+              <div class="other_login clear">
+                <p class="fl">社交账号快捷登录</p>
+                <i class="icon icon-wechat fr"></i>
+              </div>
+            </form>
             <div class="pop-bottom">
               <div class="bottom-item">
                 <button class="item-button" @click="gotoReg">前往注册</button>
