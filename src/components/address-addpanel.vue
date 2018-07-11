@@ -14,7 +14,7 @@
               <div class="item">
                 <input class="item-input" v-model="address.contactPhone" type="text" placeholder="输入收货人电话">
               </div>
-              <v-distpicker :placeholders="placeholders" @selected="onSelected"></v-distpicker>
+              <v-distpicker @province="onChangeProvince" @city="onChangeCity" @area="onChangeArea" :placeholders="placeholders"></v-distpicker>
               <div class="item">
                 <textarea class="item-textarea" v-model="address.address" placeholder="输入详细地址"></textarea>
               </div>
@@ -50,16 +50,30 @@
         }
       }
     },
+    inject:['reload'],
     props:["addShow"],
     components: {
       VDistpicker
     },
     methods:{
-      onSelected(data){
-        this.address.province=data.province.value;
-        this.address.city=data.city.value;
-        this.address.county=data.area.value;
-        this.address.regionId=data.area.code;
+      onChangeProvince(data){
+        this.editAddress.province=data.value
+      },
+      onChangeCity(data){
+        if(data.code!=undefined){
+          this.editAddress.city=data.value
+        }else{
+          this.editAddress.city=''
+        }
+      },
+      onChangeArea(data){
+        if(data.code!=undefined){
+          this.editAddress.county=data.value;
+          this.editAddress.regionId=data.code;
+        }else{
+          this.editAddress.county='';
+          this.editAddress.regionId='';
+        }
       },
       /*关闭弹窗*/
       closePop(){
@@ -67,7 +81,12 @@
       },
       /*新建地址*/
       addSubmit(){
-
+        this.axios.post("/api/customer/address/create",this.address).then(response => {
+          this.$layer.msg('添加成功');
+          this.reload();
+        }, error => {
+          this.$layer.msg(error.response.data.message);
+        });
       }
     }
   }

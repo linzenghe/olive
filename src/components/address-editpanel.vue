@@ -1,25 +1,25 @@
 <template>
-  <div id="addressEditPop" class="addressPop">
+  <div id="addressEditPop" class="addressPop" v-if="editShow">
     <div class="pop-mask"></div>
     <div class="addressPop-overlay">
       <div class="addressPop-m">
         <div class="addressPop-b">
-          <div class="closeBtn"><i class="icon icon-close"></i></div>
+          <div class="closeBtn" @click="closePop"><i class="icon icon-close"></i></div>
           <div class="addressPop-c">
             <div class="title">编辑地址</div>
             <form class="form" id="addressFrom" role="form">
               <div class="item">
-                <input class="item-input" type="text" placeholder="输入收货人姓名">
+                <input class="item-input" type="text" v-model="editAddress.contact" placeholder="输入收货人姓名">
               </div>
               <div class="item">
-                <input class="item-input" type="text" placeholder="输入收货人电话">
+                <input class="item-input" type="text" v-model="editAddress.contactPhone" placeholder="输入收货人电话">
               </div>
-              <v-distpicker :placeholders="placeholders"></v-distpicker>
+              <v-distpicker @province="onChangeProvince" @city="onChangeCity" @area="onChangeArea" :placeholders="placeholders"  :province="editAddress.province" :city="editAddress.city" :area="editAddress.county"></v-distpicker>
               <div class="item">
-                <textarea class="item-textarea" placeholder="输入详细地址"></textarea>
+                <textarea class="item-textarea" v-model="editAddress.address" placeholder="输入详细地址"></textarea>
               </div>
               <div class="submit-item">
-                <button class="item-button" type="button">确认修改</button>
+                <button class="item-button" type="button" @click="editSubmit">确认修改</button>
               </div>
             </form>
           </div>
@@ -35,15 +35,54 @@
     data() {
       return {
         placeholders: {
-          province: '------- 省 --------',
+          province: '--- 省 ---',
           city: '--- 市 ---',
           area: '--- 区 ---',
         }
       }
     },
+    inject:['reload'],
+    props:[
+      "editShow",
+      "editAddress"
+    ],
     components: {
       VDistpicker
     },
+    methods:{
+      onChangeProvince(data){
+        this.editAddress.province=data.value
+      },
+      onChangeCity(data){
+        if(data.code!=undefined){
+          this.editAddress.city=data.value
+        }else{
+          this.editAddress.city=''
+        }
+      },
+      onChangeArea(data){
+        if(data.code!=undefined){
+          this.editAddress.county=data.value;
+          this.editAddress.regionId=data.code;
+        }else{
+          this.editAddress.county='';
+          this.editAddress.regionId='';
+        }
+      },
+      /*关闭弹窗*/
+      closePop(){
+        this.$emit('listenToCloseEditEvent');
+      },
+      /*修改地址*/
+      editSubmit(){
+        this.axios.put("/api/customer/address/update",this.editAddress).then(response => {
+          this.$layer.msg('修改成功');
+          this.reload();
+        }, error => {
+          this.$layer.msg(error.response.data.message);
+        });
+      }
+    }
   }
 </script>
 <style>

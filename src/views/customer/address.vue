@@ -23,7 +23,7 @@
             <td>{{item.province+item.city+item.county+item.address}}</td>
             <td>{{item.contactPhone}}</td>
             <td class="opt">
-              <a class="edit">编辑</a>
+              <a class="edit" @click="editAddressPop(item.id)">编辑</a>
               <a class="del" @click="delAddress(item.id)">删除</a>
               <a class="set" :class="item.primary==1?'cur':''" v-text="item.primary==1?'默认地址':'设为默认地址'" @click="setPrimary(item.id)"></a>
             </td>
@@ -31,8 +31,8 @@
         </tbody>
       </table>
     </div>
-    <addressAddPanel v-bind:addShow="addShow" v-on:listenToCloseAddEvent="closeAddPop"></addressAddPanel>
-    <!--<addressEditPanel></addressEditPanel>-->
+    <addressAddPanel v-bind:addShow="addShow" v-on:listenToCloseAddEvent="closeAddPop" v-on:listenToAddressAddEvent="addData"></addressAddPanel>
+    <addressEditPanel v-bind:editShow="editShow" v-bind:editAddress="editAddress" v-on:listenToCloseEditEvent="closeEditPop"></addressEditPanel>
   </div>
 </template>
 <script>
@@ -43,6 +43,8 @@
       return{
         list:[],
         addShow:false,
+        editShow:false,
+        editAddress:{}
       }
     },
     components: {
@@ -90,6 +92,21 @@
       /*关闭新增弹窗*/
       closeAddPop(){
         this.addShow=false
+      },
+      addData(data){
+        this.list.push(data);
+      },
+      /*关闭编辑弹窗*/
+      closeEditPop(){
+        this.editShow=false
+      },
+      editAddressPop(id){
+        this.editShow=true;
+        this.axios.get("/api/customer/address/"+id).then(response => {
+          this.editAddress=response.data;
+        }, error => {
+          this.$layer.msg(error.response.data.message)
+        });
       }
     }
   }
