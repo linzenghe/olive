@@ -66,7 +66,7 @@ export default {
     return {
       total: 0,     // 记录总条数
       display: 12,    // 每页显示条数
-      current: 1,     // 当前的页数
+      current: 2,     // 当前的页数
       goodsList:[],   // 商品数据
       urlQuery:{},    // 当前路由
       /*类别*/
@@ -95,8 +95,12 @@ export default {
       this.urlQuery=this.$route.query;
       for(let i in this.urlQuery){
         if(i!='timeStamp'){
+          if(i=='pageIndex'){
+            this.current=parseInt(this.urlQuery[i])+1;
+          }
           this.searchDate[i]=this.urlQuery[i];
         }
+
       }
     }
   },
@@ -130,8 +134,13 @@ export default {
   methods:{
     pagechange(currentPage){
       // ajax请求, 向后台发送 currentPage, 来获取对应的数据
+      /*this.searchDate.pageIndex=currentPage-1;
+      this.getPageDate();*/
+      let tourl=this.getNowDate();
+      tourl.pageIndex=currentPage-1;
       this.searchDate.pageIndex=currentPage-1;
       this.getPageDate();
+      this.$router.push({name:'search',query:tourl});
     },
     /*获取数据*/
     getPageDate(){
@@ -157,6 +166,7 @@ export default {
     originSearch(originName){
       let tourl=this.getNowDate();
       tourl.origin=originName;
+      delete tourl.pageIndex;
       this.searchDate.origin=originName;
       this.current=1;
       this.searchDate.pageIndex=0;
@@ -168,6 +178,7 @@ export default {
       let tourl=this.getNowDate();
       delete tourl.price;
       delete tourl.salesVolume;
+      delete tourl.pageIndex
       this.current=1;
       this.searchDate.pageIndex=0;
       this.searchDate.price=null;
@@ -181,6 +192,7 @@ export default {
       let tourl=this.getNowDate();
       tourl.price=this.searchDate.price;
       delete tourl.salesVolume;
+      delete tourl.pageIndex
       this.current=1;
       this.searchDate.pageIndex=0;
       this.searchDate.salesVolume=null;
@@ -191,6 +203,7 @@ export default {
     saleSort(){
       let tourl=this.getNowDate();
       delete tourl.price;
+      delete tourl.pageIndex
       tourl.salesVolume=1;
       this.current=1;
       this.searchDate.pageIndex=0;
@@ -203,6 +216,7 @@ export default {
       let tourl=this.getNowDate();
       delete tourl.price;
       delete tourl.salesVolume;
+      delete tourl.pageIndex
       tourl.startPrice=start;
       tourl.endPrice=end;
       this.current=1;
@@ -219,6 +233,7 @@ export default {
       delete tourl.salesVolume;
       delete tourl.startPrice;
       delete tourl.endPrice;
+      delete tourl.pageIndex
       this.current=1;
       this.searchDate.pageIndex=0;
       this.searchDate.price=null;
